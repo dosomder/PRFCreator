@@ -1,0 +1,20 @@
+#!/sbin/sh
+
+#this is a wrapper for update-binary to catch version and outfile
+#part of PRFCreator by zxz0O0
+
+VERSION="$1"
+OUTFILE="$2"
+ZIP="$3"
+
+cd /tmp
+echo "version=$1" > prfargs
+echo "outfile=$2" >> prfargs
+
+mkdir -p prf
+cd prf
+unzip -o "$3" "META-INF/com/google/android/update-binary2"
+chmod 777 "META-INF/com/google/android/update-binary2"
+META-INF/com/google/android/update-binary2 "$1" "$2" "$3"
+
+exit 0

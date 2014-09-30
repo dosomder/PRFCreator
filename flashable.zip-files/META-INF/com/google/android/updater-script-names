@@ -1,0 +1,144 @@
+ui_print(" ");ui_print(" ");
+ui_print("===========================================");
+ui_print("|                                         |");
+ui_print("|       *** Pre-Rooted firmware ***       |");
+ui_print("|INSERT FIRMWARE HERE|");
+ui_print("|                                         |");
+ui_print("|         Created with PRFCreator         |");
+ui_print("|                by zxz0O0                |");
+ui_print("|                                         |");
+ui_print("===========================================");
+
+ui_print("");
+show_progress(1.000000, 0);
+
+ui_print("Extracting files...");
+package_extract_file("utils/busybox", "/tmp/busybox");
+set_perm(0, 0, 0755, "/tmp/busybox");
+set_progress(0.050000);
+run_program("/tmp/busybox", "mkdir", "/sdcard/prfc");
+ui_print("PRF is using partition names");
+
+# ===================== System =====================
+ui_print("Installing firmware. This might take a while...");
+set_progress(0.150000);
+if
+	run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-name/system") == "0"
+then
+	assert(package_extract_file("system.ext4", "/dev/block/platform/msm_sdcc.1/by-name/system"));
+else
+	if
+		run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-name/System") == "0"
+	then
+		assert(package_extract_file("system.ext4", "/dev/block/platform/msm_sdcc.1/by-name/System"));
+	else
+		abort("Failed to find system partition");
+	endif;
+endif;
+set_progress(0.550000);
+
+# ===================== LTALabel =====================
+if
+	package_extract_file("ltalabel.ext4", "/dev/block/platform/msm_sdcc.1/by-name/LTALabel") == "t"
+then
+	ui_print("LTALabel flashed.");
+endif;
+set_progress(0.600000);
+
+# ===================== FOTAKernel =====================
+if
+	package_extract_file("fotakernel.elf", "/dev/block/platform/msm_sdcc.1/by-name/FOTAKernel") == "t"
+then
+	ui_print("FOTAKernel flashed.");
+endif;
+set_progress(0.650000);
+
+# ===================== Kernel & rpm =====================
+if
+	run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-name/boot") == "0"
+then
+	if
+		package_extract_file("kernel.elf", "/dev/block/platform/msm_sdcc.1/by-name/boot") == "t"
+	then
+		package_extract_file("rpm.elf", "/dev/block/platform/msm_sdcc.1/by-name/rpm");
+		ui_print("Kernel flashed.");
+	endif;
+else
+	if
+		run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-name/Kernel") == "0"
+	then
+		if
+			package_extract_file("kernel.elf", "/dev/block/platform/msm_sdcc.1/by-name/Kernel") == "t"
+		then
+			package_extract_file("rpm.elf", "/dev/block/platform/msm_sdcc.1/by-name/rpm");
+			ui_print("Kernel flashed.");
+		endif;
+	else
+		abort("Kernel partition not found");
+	endif;
+endif;
+set_progress(0.700000);
+
+# ===================== Modem =====================
+if
+	package_extract_file("amss_fsg", "/sdcard/prfc/amss_fsg") == "t"
+then
+	if
+		run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-name/fsg") != "0"
+	then
+		abort("Error: fsg partition does not exist");
+	endif;
+	#fsg partition is bigger than fsg file but it's just 0x00 at the end, that's why we have to use dd with conv=notrunc
+	run_program("/tmp/busybox", "dd", "if=/sdcard/prfc/amss_fsg", "of=/dev/block/platform/msm_sdcc.1/by-name/fsg", "conv=notrunc");
+
+	#not sure if these are required as content seem to change after every reboot
+	#+ fs_* files seem to be 1024bytes 0x00
+	#flashtool fully wipes modemst* partitions
+	#OTA updates simply use package_extract_file and write 1024bytes
+	if
+		package_extract_file("amss_fs_1", "/sdcard/prfc/amss_fs_1") == "t"
+	then
+		assert(run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-name/modemst1") == "0");
+		run_program("/tmp/busybox", "dd", "if=/sdcard/prfc/amss_fs_1", "of=/dev/block/platform/msm_sdcc.1/by-name/modemst1", "conv=notrunc");
+	endif;
+	if
+		package_extract_file("amss_fs_2", "/sdcard/prfc/amss_fs_2") == "t"
+	then
+		assert(run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-name/modemst2") == "0");
+		run_program("/tmp/busybox", "dd", "if=/sdcard/prfc/amss_fs_2", "of=/dev/block/platform/msm_sdcc.1/by-name/modemst2", "conv=notrunc");
+	endif;
+	ui_print("Modem flashed.");
+endif;
+
+# ===================== Clean up =====================
+set_progress(0.900000);
+ui_print("Cleaning up...");
+unmount("/system");
+unmount("/System");
+delete_recursive("/sdcard/prfc");
+
+set_progress(1.000000);
+ui_print("Finished!");
+ui_print("Launching SuperSU and Recovery zip");
+ui_print(" ");
+
+# ===================== SuperSU =====================
+package_extract_file("SuperSU.zip", "/tmp/SuperSU.zip");
+run_program("/tmp/busybox", "mkdir", "/tmp/SuperSU_extracted");
+run_program("/tmp/busybox", "unzip", "-d", "/tmp/SuperSU_extracted", "/tmp/SuperSU.zip");
+set_perm(0, 0, 0755, "/tmp/SuperSU_extracted/META-INF/com/google/android/update-binary");
+run_program("/tmp/SuperSU_extracted/META-INF/com/google/android/update-binary", "dummy", file_getprop("/tmp/prfargs", "outfile"), "/tmp/SuperSU.zip");
+delete_recursive("/tmp/SuperSU_extracted");
+delete("/tmp/SuperSU.zip");
+
+# ===================== Recovery (optional) =====================
+if
+	package_extract_file("dualrecovery.zip", "/tmp/dualrecovery.zip") == "t"
+then
+	run_program("/tmp/busybox", "mkdir", "/tmp/dualrecovery_extracted");
+	run_program("/tmp/busybox", "unzip", "-d", "/tmp/dualrecovery_extracted", "/tmp/dualrecovery.zip");
+	set_perm(0, 0, 0755, "/tmp/dualrecovery_extracted/META-INF/com/google/android/update-binary");
+	run_program("/tmp/dualrecovery_extracted/META-INF/com/google/android/update-binary", file_getprop("/tmp/prfargs", "version"), file_getprop("/tmp/prfargs", "outfile"), "/tmp/dualrecovery.zip");
+	delete_recursive("/tmp/dualrecovery_extracted");
+	delete("/tmp/dualrecovery.zip");
+endif;

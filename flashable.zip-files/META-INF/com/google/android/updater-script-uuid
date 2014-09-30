@@ -1,0 +1,143 @@
+ui_print(" ");ui_print(" ");
+ui_print("===========================================");
+ui_print("|                                         |");
+ui_print("|       *** Pre-Rooted firmware ***       |");
+ui_print("|INSERT FIRMWARE HERE|");
+ui_print("|                                         |");
+ui_print("|         Created with PRFCreator         |");
+ui_print("|                by zxz0O0                |");
+ui_print("|                                         |");
+ui_print("===========================================");
+
+ui_print("");
+show_progress(1.000000, 0);
+
+ui_print("Extracting files...");
+package_extract_file("utils/busybox", "/tmp/busybox");
+package_extract_file("utils/sgdisk", "/tmp/sgdisk");
+package_extract_file("utils/create-uuidlinks.sh", "/tmp/create-uuidlinks.sh");
+set_perm(0, 0, 0755, "/tmp/busybox");
+set_perm(0, 0, 0755, "/tmp/sgdisk");
+set_perm(0, 0, 0755, "/tmp/create-uuidlinks.sh");
+set_progress(0.050000);
+run_program("/tmp/busybox", "mkdir", "/sdcard/prfc");
+run_program("/tmp/create-uuidlinks.sh", "/tmp/");
+ui_print("PRF is using UUIDs");
+
+# ===================== System =====================
+ui_print("Installing firmware. This might take a while...");
+set_progress(0.150000);
+
+if
+	run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-uuid/SYSTEMUUID") != "0"
+then
+	abort("Error: UUID link to system partition does not exist");
+endif;
+assert(package_extract_file("system.ext4", "/dev/block/platform/msm_sdcc.1/by-uuid/SYSTEMUUID"));
+set_progress(0.550000);
+
+# ===================== LTALabel =====================
+if
+	package_extract_file("ltalabel.ext4", "/dev/block/platform/msm_sdcc.1/by-uuid/LTALABELUUID") == "t"
+then
+	if
+		run_program("/sbin/sh", "-c", "ls -l /dev/block/platform/msm_sdcc.1/by-uuid/ | /tmp/busybox egrep \"^l.*LTALABELUUID ->\"") != "0"
+	then
+		abort("Error: UUID link to LTALabel partition does not exist");
+	endif;
+	ui_print("LTALabel flashed.");
+endif;
+set_progress(0.600000);
+
+# ===================== FOTAKernel =====================
+if
+	package_extract_file("fotakernel.elf", "/dev/block/platform/msm_sdcc.1/by-uuid/FOTAKERNELUUID") == "t"
+then
+	if
+		run_program("/sbin/sh", "-c", "ls -l /dev/block/platform/msm_sdcc.1/by-uuid/ | /tmp/busybox egrep \"^l.*FOTAKERNELUUID ->\"") != "0"
+	then
+		abort("Error: UUID link to FOTAKernel partition does not exist");
+	endif;
+	ui_print("FOTAKernel flashed.");
+endif;
+set_progress(0.650000);
+
+# ===================== Kernel & rpm =====================
+if
+	package_extract_file("boot.elf", "/dev/block/platform/msm_sdcc.1/by-uuid/BOOTUUID") == "t"
+then
+	if
+		run_program("/sbin/sh", "-c", "ls -l /dev/block/platform/msm_sdcc.1/by-uuid/ | /tmp/busybox egrep \"^l.*BOOTUUID ->\"") != "0"
+	then
+		abort("Error: UUID link to boot partition does not exist");
+	endif;
+	package_extract_file("rpm.elf", "/dev/block/platform/msm_sdcc.1/by-uuid/RPMUUID");
+	ui_print("Kernel flashed.");
+endif;
+set_progress(0.700000);
+
+# ===================== Modem =====================
+# There are some cases where modem partitions have different names. So we use UUID
+if
+	package_extract_file("amss_fsg", "/sdcard/prfc/amss_fsg") == "t"
+then
+	if
+		run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-uuid/AMSS_FSGUUID") != "0"
+	then
+		abort("Error: UUID link to fsg partition does not exist");
+	endif;
+
+	#fsg partition is bigger than fsg file but it's just 0x00 at the end, that's why we have to use dd with conv=notrunc
+	run_program("/tmp/busybox", "dd", "if=/sdcard/prfc/amss_fsg", "of=/dev/block/platform/msm_sdcc.1/by-uuid/AMSS_FSGUUID", "conv=notrunc");
+
+	#not sure if these are required as content seem to change after every reboot
+	#+ fs_* files seem to be 1024bytes 0x00
+	#flashtool fully wipes modemst* partitions
+	#OTA updates simply use package_extract_file and write 1024bytes
+	if
+		package_extract_file("amss_fs_1", "/sdcard/prfc/amss_fs_1") == "t"
+	then
+		assert(run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-uuid/AMSS_FS_1UUID") == "0");
+		run_program("/tmp/busybox", "dd", "if=/sdcard/prfc/amss_fs_1", "of=/dev/block/platform/msm_sdcc.1/by-uuid/AMSS_FS_1UUID", "conv=notrunc");
+	endif;
+	if
+		package_extract_file("amss_fs_2", "/sdcard/prfc/amss_fs_2") == "t"
+	then
+		assert(run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-uuid/AMSS_FS_2UUID") == "0");
+		run_program("/tmp/busybox", "dd", "if=/sdcard/prfc/amss_fs_2", "of=/dev/block/platform/msm_sdcc.1/by-uuid/AMSS_FS_2UUID", "conv=notrunc");
+	endif;
+	ui_print("Modem flashed.");
+endif;
+
+# ===================== Clean up =====================
+set_progress(0.900000);
+ui_print("Cleaning up...");
+unmount("/system");
+unmount("/System");
+delete_recursive("/sdcard/prfc");
+
+set_progress(1.000000);
+ui_print("Finished!");
+ui_print("Launching SuperSU and Recovery zip");
+ui_print(" ");
+
+# ===================== SuperSU =====================
+package_extract_file("SuperSU.zip", "/tmp/SuperSU.zip");
+run_program("/tmp/busybox", "mkdir", "/tmp/SuperSU_extracted");
+run_program("/tmp/busybox", "unzip", "-d", "/tmp/SuperSU_extracted", "/tmp/SuperSU.zip");
+set_perm(0, 0, 0755, "/tmp/SuperSU_extracted/META-INF/com/google/android/update-binary");
+run_program("/tmp/SuperSU_extracted/META-INF/com/google/android/update-binary", "dummy", file_getprop("/tmp/prfargs", "outfile"), "/tmp/SuperSU.zip");
+delete_recursive("/tmp/SuperSU_extracted");
+delete("/tmp/SuperSU.zip");
+
+# ===================== Recovery (optional) =====================
+if
+	package_extract_file("dualrecovery.zip", "/tmp/dualrecovery.zip") == "t"
+then
+	run_program("/tmp/busybox", "mkdir", "/tmp/dualrecovery_extracted");
+	run_program("/tmp/busybox", "unzip", "-d", "/tmp/dualrecovery_extracted", "/tmp/dualrecovery.zip");
+	set_perm(0, 0, 0755, "/tmp/dualrecovery_extracted/META-INF/com/google/android/update-binary");
+	run_program("/tmp/dualrecovery_extracted/META-INF/com/google/android/update-binary", file_getprop("/tmp/prfargs", "version"), file_getprop("/tmp/prfargs", "outfile"), "/tmp/dualrecovery.zip");
+	delete_recursive("/tmp/dualrecovery_extracted");
+	delete("/tmp/dualrecovery.zip");
+endif;
