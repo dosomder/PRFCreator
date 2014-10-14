@@ -144,7 +144,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>del "$(ProjectDir)Resources\flashable.zip"
-"$(SolutionDir)7z.exe" a -r  "$(ProjectDir)Resources\flashable.zip" "$(SolutionDir)flashable.zip-files\*" -mx7</PreBuildEvent>
+"$(SolutionDir)compile-tools\7z.exe" a -r  "$(ProjectDir)Resources\flashable.zip" "$(SolutionDir)flashable.zip-files\*" -mx7</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

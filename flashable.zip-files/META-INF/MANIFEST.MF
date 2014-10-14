@@ -1,24 +1,24 @@
 Manifest-Version: 1.0
 Created-By: 1.0 (Android SignApk)
 
-Name: 7za
-SHA1-Digest: hvf7IZz0899UKtKXgbzqzo/Nrh4=
+Name: META-INF/com/google/android/update-binary2
+SHA1-Digest: KGPVU88RlgQzaqNTg0kACL0cLeA=
 
-Name: META-INF/com/google/android/updater-script
-SHA1-Digest: Mmjoi6dfEZkcUEW3AQoM9UGjr20=
+Name: busybox
+SHA1-Digest: 8SRb4Fn4r9fnbIU6kJds4NpmB6k=
 
-Name: system/lib/modules/usb-storage.ko
-SHA1-Digest: R1+vDRevGXnVBSZ+0tyQUVLlBxI=
+Name: sgdisk
+SHA1-Digest: S0hJittji7bVI63d7nFWFcRh+B8=
 
-Name: system/lib/modules/ntfs.ko
-SHA1-Digest: zMfOgIA3nQh9IHY3Md3jMuEutpo=
+Name: META-INF/com/google/android/updater-script-uuid
+SHA1-Digest: mm7Fg/pPs89AalrYch4D2Ddwhto=
 
 Name: META-INF/com/google/android/update-binary
-SHA1-Digest: 8n8tDr103eM8ktcLq1LPCc64K4o=
+SHA1-Digest: m45/vMHo7snoo4r6A8f1hlCKXoQ=
 
-Name: system/lib/modules/fuse.ko
-SHA1-Digest: x4xjRyt+fvBOIpn961v8JwMfqzA=
+Name: META-INF/com/google/android/updater-script-names
+SHA1-Digest: WyTVwkuQ1J7u6fLk9Ko5JwYmnJw=
 
-Name: system/lib/modules/cifs.ko
-SHA1-Digest: 9GvRkMg/2nstYJktP3exGvmZuMk=
+Name: create-uuidlinks.sh
+SHA1-Digest: 312kDxSxsYFD3jevEkrZnkr1Qqg=
 
