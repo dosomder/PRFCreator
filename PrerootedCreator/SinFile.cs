@@ -38,8 +38,8 @@ namespace PRFCreator
         //Credits to Androxyde, took this method from his project 'Flashtool'
         public static long GetFinalLength(BinaryReader br, int DataStart)
         {
-            //br.BaseStream.Position = GetDataStart(br);
             br.BaseStream.Position = DataStart;
+            //ext4 superblock magic
             byte[] search = { 0x53, 0xEF };
             int i = 0;
             while (!Utility.byteArrayCompare(br.ReadBytes(2), search))

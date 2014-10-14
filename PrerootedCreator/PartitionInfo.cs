@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.ComponentModel;
 
 namespace PRFCreator
 {
@@ -40,7 +41,7 @@ namespace PRFCreator
             }
         }
 
-        /*public static void ReadPartInfo(object worker, string ftffile)
+        /*public static void ReadPartInfo(BackgroundWorker worker, string ftffile)
         {
             if (!Zipping.ExistsInZip("partition-image.sin", ftffile))
             {
@@ -60,7 +61,8 @@ namespace PRFCreator
             int skip = SinFile.GetSinHeaderLength(br);
             br.BaseStream.Position = skip + 0xC; //this 0xC is some unknown data
             int partitionCount = Utility.ReadIntBigEndian(br);
-            if (partitionCount < 2 || partitionCount > 40) //no special reason to use these numbers
+            if (partitionCount < 2 || //there should be atleast bootloader/kernel/etc
+                partitionCount > 40) //more than 40 partitions is highly unlikely
             {
                 Logger.WriteLog("Info: Could not read partition count. Using default partition names");
                 return;

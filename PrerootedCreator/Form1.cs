@@ -22,10 +22,7 @@ namespace PRFCreator
             openFileDialog1.FileName = string.Empty;
             openFileDialog1.Multiselect = false;
 
-            //Logger logger = new Logger(this);
             Logger.form = Job.form = this;
-            //Job job = new Job(this);
-            //Job.form = this;
         }
 
         private void ftf_button_Click(object sender, EventArgs e)
