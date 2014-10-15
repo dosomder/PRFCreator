@@ -31,7 +31,7 @@ namespace PRFCreator
             return count; //Don't count 'Complete'
         }
 
-        private static Action<BackgroundWorker>[] jobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddSystem, AddExtras, AddSuperSU, AddRecovery, Complete };
+        private static Action<BackgroundWorker>[] jobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddSystem, AddExtras, AddSuperSU, AddRecovery, /*SignZip,*/ Complete };
         public static void Worker()
         {
             JobNum = 0;
@@ -144,6 +144,34 @@ namespace PRFCreator
             string recoveryFile = form.rec_textbox.Text;
             Logger.WriteLog("Adding " + Path.GetFileName(recoveryFile));
             Zipping.AddToZip(worker, "flashable.zip", recoveryFile, "dualrecovery.zip");
+        }
+
+        //~ doubles the process time
+        private static void SignZip(BackgroundWorker worker)
+        {
+            SetJobNum(++JobNum);
+            if (!Utility.JavaInstalled())
+            {
+                Logger.WriteLog("Error: Could not execute Java. Is it installed?");
+                return;
+            }
+            if (!File.Exists("signapk.jar"))
+            {
+                Logger.WriteLog("Error: signapk.jar file not found");
+                return;
+            }
+
+            Utility.WriteResourceToFile("PRFCreator.Resources.testkey.pk8", "testkey.pk8");
+            Utility.WriteResourceToFile("PRFCreator.Resources.testkey.x509.pem", "testkey.x509.pem");
+
+            Logger.WriteLog("Signing zip file");
+            if (Utility.RunProcess("java.exe", "-Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 flashable.zip flashable-signed.zip") == 0)
+                File.Delete("flashable.zip");
+            else
+                Logger.WriteLog("Error: Could not sign zip");
+
+            File.Delete("testkey.pk8");
+            File.Delete("testkey.x509.pem");
         }
 
         private static void Complete(BackgroundWorker worker)

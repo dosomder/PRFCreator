@@ -3,11 +3,39 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace PRFCreator
 {
     static class Utility
     {
+        public static bool JavaInstalled()
+        {
+            try
+            {
+                int exitcode = RunProcess("java.exe", "-version");
+                if (exitcode != 0)
+                    throw new ApplicationException("Error: Unexpected exit code: " + exitcode);
+            }
+            catch (Win32Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static int RunProcess(string file, string argument)
+        {
+            Process p = new Process();
+            p.StartInfo.FileName = file;
+            p.StartInfo.Arguments = argument;
+            p.StartInfo.CreateNoWindow = !(p.StartInfo.UseShellExecute = false);
+            p.Start();
+            p.WaitForExit();
+            return p.ExitCode;
+        }
+
         public static int freeSpaceMB(string path)
         {
             string driveLetter = Path.GetPathRoot(path);

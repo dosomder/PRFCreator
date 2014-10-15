@@ -59,15 +59,5 @@ namespace PRFCreator.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        public static byte[] flashable {
-            get {
-                object obj = ResourceManager.GetObject("flashable", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }
