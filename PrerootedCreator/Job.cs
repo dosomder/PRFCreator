@@ -25,13 +25,15 @@ namespace PRFCreator
             int count = jobs.Length - 1; //don't count 'Complete'
             if (form.include_checklist.CheckedItems.Count < 1) //if there are no extra files
                 count--;
+            if (form.options_checklist.CheckedItems.Count < 1)
+                count--;
             if (!File.Exists(form.rec_textbox.Text)) //if recovery is not included
                 count--;
 
             return count; //Don't count 'Complete'
         }
 
-        private static Action<BackgroundWorker>[] jobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddSystem, AddExtras, AddSuperSU, AddRecovery, /*SignZip,*/ Complete };
+        private static Action<BackgroundWorker>[] jobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddSystem, AddExtras, AddSuperSU, AddRecovery, SignZip, Complete };
         public static void Worker()
         {
             JobNum = 0;
@@ -149,6 +151,9 @@ namespace PRFCreator
         //~ doubles the process time
         private static void SignZip(BackgroundWorker worker)
         {
+            if (!form.options_checklist.CheckedItems.Contains("Sign zip"))
+                return;
+
             SetJobNum(++JobNum);
             if (!Utility.JavaInstalled())
             {

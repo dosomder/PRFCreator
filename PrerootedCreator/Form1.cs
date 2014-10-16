@@ -74,7 +74,6 @@ namespace PRFCreator
             if (!System.IO.File.Exists(rec_textbox.Text))
             {
                 Logger.WriteLog("Info: Not adding recovery");
-                //return;
             }
             else if (Zipping.ExistsInZip(rec_textbox.Text, "updater-script"))
             {
@@ -113,6 +112,10 @@ namespace PRFCreator
                 create_button.Invoke(new MethodInvoker(delegate { create_button.Enabled = Enabled; }));
             else
                 create_button.Enabled = Enabled;
+            if (options_checklist.InvokeRequired)
+                options_checklist.Invoke(new MethodInvoker(delegate { options_checklist.Enabled = Enabled; }));
+            else
+                options_checklist.Enabled = Enabled;
         }
 
         private void dr_button_Click(object sender, EventArgs e)
@@ -127,11 +130,6 @@ namespace PRFCreator
 
             rec_textbox.Text = openFileDialog1.FileName;
             openFileDialog1.FileName = string.Empty;
-        }
-
-        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            include_checklist.SelectedItem = null;
         }
     }
 }
