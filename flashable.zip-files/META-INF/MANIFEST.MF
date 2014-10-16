@@ -4,11 +4,17 @@ Created-By: 1.0 (Android SignApk)
 Name: META-INF/com/google/android/update-binary2
 SHA1-Digest: KGPVU88RlgQzaqNTg0kACL0cLeA=
 
-Name: busybox
-SHA1-Digest: 8SRb4Fn4r9fnbIU6kJds4NpmB6k=
-
-Name: sgdisk
+Name: utils/sgdisk
 SHA1-Digest: S0hJittji7bVI63d7nFWFcRh+B8=
+
+Name: utils/create-uuidlinks.sh
+SHA1-Digest: 312kDxSxsYFD3jevEkrZnkr1Qqg=
+
+Name: META-INF/com/android/otacert
+SHA1-Digest: 71Q6Rn2DDZl1zPDVaaeEHItd+Yg=
+
+Name: utils/busybox
+SHA1-Digest: 8SRb4Fn4r9fnbIU6kJds4NpmB6k=
 
 Name: META-INF/com/google/android/updater-script-uuid
 SHA1-Digest: mm7Fg/pPs89AalrYch4D2Ddwhto=
@@ -18,7 +24,4 @@ SHA1-Digest: m45/vMHo7snoo4r6A8f1hlCKXoQ=
 
 Name: META-INF/com/google/android/updater-script-names
 SHA1-Digest: WyTVwkuQ1J7u6fLk9Ko5JwYmnJw=
-
-Name: create-uuidlinks.sh
-SHA1-Digest: 312kDxSxsYFD3jevEkrZnkr1Qqg=
 

@@ -1,25 +1,28 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android SignApk)
-SHA1-Digest-Manifest: cCg1psjJ5CGqqzITRKCmv2QR2D8=
+SHA1-Digest-Manifest: 8G9AIjVD9vsPbIByYPKDK7SnQq0=
 
 Name: META-INF/com/google/android/update-binary2
-SHA1-Digest: igVCy14mTWxqL/sa5Ug9Ilcc5hE=
+SHA1-Digest-Manifest: igVCy14mTWxqL/sa5Ug9Ilcc5hE=
 
-Name: busybox
-SHA1-Digest: ChKXhKxKSVrWyFkPB5mHPUuQI+M=
+Name: utils/sgdisk
+SHA1-Digest-Manifest: xPn94snyuuzOh7pExG1iXMsRw6E=
 
-Name: sgdisk
-SHA1-Digest: VVoP8GEFCeN3msAh6X5RfvknR54=
+Name: utils/create-uuidlinks.sh
+SHA1-Digest-Manifest: ZTS5SSdoRDjt1MqrzKOIFcz6WVs=
+
+Name: META-INF/com/android/otacert
+SHA1-Digest-Manifest: QW7yPFUPbhU0tUYKW4i2EdneCnw=
+
+Name: utils/busybox
+SHA1-Digest-Manifest: d+IwdPSg12wS4oLteLfJtD7MPME=
 
 Name: META-INF/com/google/android/update-binary
-SHA1-Digest: 6sZ2VZhai9LqKqzEcMAHAEYgcyk=
+SHA1-Digest-Manifest: 6sZ2VZhai9LqKqzEcMAHAEYgcyk=
 
 Name: META-INF/com/google/android/updater-script-uuid
-SHA1-Digest: L6rBqi1/fDv+awO0eTW1oM7/ri8=
+SHA1-Digest-Manifest: L6rBqi1/fDv+awO0eTW1oM7/ri8=
 
 Name: META-INF/com/google/android/updater-script-names
-SHA1-Digest: tAP39NX8/KU9mvbj8mIL1zeZhAE=
-
-Name: create-uuidlinks.sh
-SHA1-Digest: aZ1A3MfU3cqQdc5J5H6eR4Qzijc=
+SHA1-Digest-Manifest: tAP39NX8/KU9mvbj8mIL1zeZhAE=
 
