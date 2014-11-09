@@ -147,7 +147,7 @@
             // 
             this.version_label.AutoSize = true;
             this.version_label.Font = new System.Drawing.Font("Consolas", 7.5F);
-            this.version_label.Location = new System.Drawing.Point(578, 1);
+            this.version_label.Location = new System.Drawing.Point(583, 1);
             this.version_label.Name = "version_label";
             this.version_label.Size = new System.Drawing.Size(0, 12);
             this.version_label.TabIndex = 11;
@@ -202,7 +202,7 @@
             // include_label
             // 
             this.include_label.AutoSize = true;
-            this.include_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
+            this.include_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.include_label.Location = new System.Drawing.Point(3, 15);
             this.include_label.Name = "include_label";
             this.include_label.Size = new System.Drawing.Size(47, 15);
@@ -283,7 +283,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(611, 335);
+            this.ClientSize = new System.Drawing.Size(611, 326);
             this.Controls.Add(this.version_label);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
@@ -295,8 +295,8 @@
             this.Controls.Add(this.job_label);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(627, 373);
-            this.MinimumSize = new System.Drawing.Size(627, 373);
+            this.MaximumSize = new System.Drawing.Size(627, 365);
+            this.MinimumSize = new System.Drawing.Size(627, 365);
             this.Name = "Form1";
             this.Text = "PRFCreator";
             this.Load += new System.EventHandler(this.Form1_Load);

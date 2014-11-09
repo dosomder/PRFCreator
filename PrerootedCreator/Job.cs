@@ -30,17 +30,18 @@ namespace PRFCreator
             if (!File.Exists(form.rec_textbox.Text)) //if recovery is not included
                 count--;
 
-            return count; //Don't count 'Complete'
+            return count;
         }
 
         private static Action<BackgroundWorker>[] jobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddSystem, AddExtras, AddSuperSU, AddRecovery, SignZip, Complete };
         public static void Worker()
         {
             JobNum = 0;
-            int free = Utility.freeSpaceMB(System.IO.Path.GetTempPath());
+            int free = Utility.freeSpaceMB(Path.GetTempPath());
             if (free < 3000)
             {
-                Logger.WriteLog("Error: Not enough disk space. Please make sure that atleast 3GB are free. Currently you only have " + free + "MB available");
+                Logger.WriteLog("Error: Not enough disk space. Please make sure that you have atleast 3GB free space on drive " + Path.GetPathRoot(Path.GetTempPath())
+                    + ". Currently you only have " + free + "MB available");
                 return;
             }
             if (!Zipping.ExistsInZip(form.ftf_textbox.Text, "system.sin"))
