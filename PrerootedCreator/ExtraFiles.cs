@@ -27,6 +27,27 @@ namespace PRFCreator
             }
         }
 
+        public static void AddExtraFlashable(BackgroundWorker worker, string filename, string ftffile)
+        {
+            Logger.WriteLog("Adding flashable zip: " + Path.GetFileName(filename));
+            string fixedname = Path.GetFileName(filename).Replace(' ', '_');
+
+            string cmd = "\n# " + fixedname + "\n" +
+                "if\n" +
+                "\tpackage_extract_file(\"" + fixedname + "\", \"/tmp/" + fixedname + "\") == \"t\"\n" +
+                "then\n" +
+                "\trun_program(\"/tmp/busybox\", \"mkdir\", \"/tmp/" + Path.GetFileNameWithoutExtension(fixedname) + "_extracted" + "\");\n" +
+                "\trun_program(\"/tmp/busybox\", \"unzip\", \"-d\", \"/tmp/" + Path.GetFileNameWithoutExtension(fixedname) + "_extracted" + "\", \"/tmp/" + fixedname + "\");\n" +
+                "\tset_perm(0, 0, 0755, \"/tmp/" + Path.GetFileNameWithoutExtension(fixedname) + "_extracted" + "/META-INF/com/google/android/update-binary\");\n" +
+                "\trun_program(\"/tmp/" + Path.GetFileNameWithoutExtension(fixedname) + "_extracted" + "/META-INF/com/google/android/update-binary\", file_getprop(\"/tmp/prfargs\", \"version\"), file_getprop(\"/tmp/prfargs\", \"outfile\"), \"/tmp/" + fixedname + "\");\n" +
+                "\tdelete_recursive(\"/tmp/" + Path.GetFileNameWithoutExtension(fixedname) + "_extracted" + "\");\n" +
+                "\tdelete(\"/tmp/" + fixedname + "\");\n" +
+                "endif;\n" +
+                "#InsertExtra\n";
+            Utility.EditScript(worker, "#InsertExtra", cmd);
+            Zipping.AddToZip(worker, "flashable.zip", filename, fixedname, false);
+        }
+
         private static void AddKernel(BackgroundWorker worker, string ftffile)
         {
             ExtractAndAdd(worker, "kernel", ".elf", ftffile, "boot");
@@ -76,7 +97,6 @@ namespace PRFCreator
             Zipping.UnzipFile(worker, ftffile, name + ".sin", string.Empty, System.IO.Path.GetTempPath(), false);
             if (File.Exists(System.IO.Path.GetTempPath() + "\\" + name + ".sin"))
             {
-                //Logger.WriteLog("Adding " + name + " to zip");
                 Logger.WriteLog("   " + name);
                 SinExtract.ExtractSin(worker, System.IO.Path.GetTempPath() + "\\" + name + ".sin", System.IO.Path.GetTempPath() + "\\" + name + extension, false);
 

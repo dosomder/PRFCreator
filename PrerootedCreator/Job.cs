@@ -29,11 +29,13 @@ namespace PRFCreator
                 count--;
             if (!File.Exists(form.rec_textbox.Text)) //if recovery is not included
                 count--;
+            if (form.extra_listbox.Items.Count < 1) //no additional zip files
+                count--;
 
             return count;
         }
 
-        private static Action<BackgroundWorker>[] jobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddSystem, AddExtras, AddSuperSU, AddRecovery, SignZip, Complete };
+        private static Action<BackgroundWorker>[] jobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddSystem, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, SignZip, Complete };
         public static void Worker()
         {
             JobNum = 0;
@@ -128,6 +130,16 @@ namespace PRFCreator
             SetJobNum(++JobNum);
             foreach (string item in form.include_checklist.CheckedItems)
                 ExtraFiles.AddExtraFiles(worker, item.ToLower(), form.ftf_textbox.Text);
+        }
+
+        private static void AddExtraFlashable(BackgroundWorker worker)
+        {
+            if (form.extra_listbox.Items.Count < 1)
+                return;
+
+            SetJobNum(++JobNum);
+            foreach (string file in form.extra_listbox.Items)
+                ExtraFiles.AddExtraFlashable(worker, file, form.ftf_textbox.Text);
         }
 
         private static void AddSuperSU(BackgroundWorker worker)

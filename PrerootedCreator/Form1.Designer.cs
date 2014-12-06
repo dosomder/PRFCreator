@@ -49,11 +49,17 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.add_extra_button = new System.Windows.Forms.Button();
+            this.remove_extra_button = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.extra_listbox = new System.Windows.Forms.ListBox();
+            this.extra_lbl = new System.Windows.Forms.Label();
             this.include_checklist = new PRFCreator.CustomCheckedListBox();
             this.options_checklist = new PRFCreator.CustomCheckedListBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // ftf_label
@@ -117,7 +123,7 @@
             // 
             // create_button
             // 
-            this.create_button.Location = new System.Drawing.Point(518, 294);
+            this.create_button.Location = new System.Drawing.Point(518, 394);
             this.create_button.Name = "create_button";
             this.create_button.Size = new System.Drawing.Size(79, 23);
             this.create_button.TabIndex = 8;
@@ -129,7 +135,7 @@
             // 
             this.status_textbox.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.status_textbox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.status_textbox.Location = new System.Drawing.Point(15, 162);
+            this.status_textbox.Location = new System.Drawing.Point(15, 262);
             this.status_textbox.Name = "status_textbox";
             this.status_textbox.ReadOnly = true;
             this.status_textbox.Size = new System.Drawing.Size(582, 129);
@@ -138,7 +144,7 @@
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(15, 297);
+            this.progressBar.Location = new System.Drawing.Point(15, 397);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(435, 16);
             this.progressBar.TabIndex = 10;
@@ -151,6 +157,7 @@
             this.version_label.Name = "version_label";
             this.version_label.Size = new System.Drawing.Size(0, 12);
             this.version_label.TabIndex = 11;
+            this.version_label.Click += new System.EventHandler(this.versionlbl_Click);
             // 
             // rec_textbox
             // 
@@ -184,7 +191,7 @@
             // 
             this.job_label.AutoSize = true;
             this.job_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.job_label.Location = new System.Drawing.Point(457, 297);
+            this.job_label.Location = new System.Drawing.Point(457, 397);
             this.job_label.Name = "job_label";
             this.job_label.Size = new System.Drawing.Size(30, 15);
             this.job_label.TabIndex = 15;
@@ -194,7 +201,7 @@
             // 
             this.jobnum_label.AutoSize = true;
             this.jobnum_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.jobnum_label.Location = new System.Drawing.Point(485, 297);
+            this.jobnum_label.Location = new System.Drawing.Point(485, 397);
             this.jobnum_label.Name = "jobnum_label";
             this.jobnum_label.Size = new System.Drawing.Size(0, 15);
             this.jobnum_label.TabIndex = 16;
@@ -246,6 +253,56 @@
             this.groupBox3.TabIndex = 23;
             this.groupBox3.TabStop = false;
             // 
+            // add_extra_button
+            // 
+            this.add_extra_button.Location = new System.Drawing.Point(495, 30);
+            this.add_extra_button.Name = "add_extra_button";
+            this.add_extra_button.Size = new System.Drawing.Size(75, 23);
+            this.add_extra_button.TabIndex = 25;
+            this.add_extra_button.Text = "Add";
+            this.add_extra_button.UseVisualStyleBackColor = true;
+            this.add_extra_button.Click += new System.EventHandler(this.add_extra_button_Click);
+            // 
+            // remove_extra_button
+            // 
+            this.remove_extra_button.Location = new System.Drawing.Point(495, 63);
+            this.remove_extra_button.Name = "remove_extra_button";
+            this.remove_extra_button.Size = new System.Drawing.Size(75, 23);
+            this.remove_extra_button.TabIndex = 26;
+            this.remove_extra_button.Text = "Remove";
+            this.remove_extra_button.UseVisualStyleBackColor = true;
+            this.remove_extra_button.Click += new System.EventHandler(this.remove_extra_button_Click);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.extra_listbox);
+            this.groupBox4.Controls.Add(this.extra_lbl);
+            this.groupBox4.Controls.Add(this.remove_extra_button);
+            this.groupBox4.Controls.Add(this.add_extra_button);
+            this.groupBox4.Location = new System.Drawing.Point(15, 157);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(582, 94);
+            this.groupBox4.TabIndex = 27;
+            this.groupBox4.TabStop = false;
+            // 
+            // extra_listbox
+            // 
+            this.extra_listbox.FormattingEnabled = true;
+            this.extra_listbox.Location = new System.Drawing.Point(6, 30);
+            this.extra_listbox.Name = "extra_listbox";
+            this.extra_listbox.Size = new System.Drawing.Size(474, 56);
+            this.extra_listbox.TabIndex = 28;
+            // 
+            // extra_lbl
+            // 
+            this.extra_lbl.AutoSize = true;
+            this.extra_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
+            this.extra_lbl.Location = new System.Drawing.Point(6, 10);
+            this.extra_lbl.Name = "extra_lbl";
+            this.extra_lbl.Size = new System.Drawing.Size(55, 15);
+            this.extra_lbl.TabIndex = 15;
+            this.extra_lbl.Text = "Extra Zip";
+            // 
             // include_checklist
             // 
             this.include_checklist.AccessibleDescription = "";
@@ -283,7 +340,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(611, 326);
+            this.ClientSize = new System.Drawing.Size(611, 426);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.version_label);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
@@ -295,7 +353,6 @@
             this.Controls.Add(this.job_label);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(627, 365);
             this.MinimumSize = new System.Drawing.Size(627, 365);
             this.Name = "Form1";
             this.Text = "PRFCreator";
@@ -305,6 +362,8 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -334,6 +393,11 @@
         private System.Windows.Forms.GroupBox groupBox2;
         public CustomCheckedListBox options_checklist;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button add_extra_button;
+        private System.Windows.Forms.Button remove_extra_button;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label extra_lbl;
+        public System.Windows.Forms.ListBox extra_listbox;
     }
 }
 

@@ -18,7 +18,7 @@ namespace PRFCreator
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            version_label.Text = "v0.7";
+            version_label.Text = "v0.8";
             openFileDialog1.FileName = string.Empty;
             openFileDialog1.Multiselect = false;
 
@@ -51,6 +51,12 @@ namespace PRFCreator
 
             su_textbox.Text = openFileDialog1.FileName;
             openFileDialog1.FileName = string.Empty;
+        }
+
+        private void versionlbl_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("PRFCreator " + version_label.Text + "\n\nCreated by zxz0O0\nThanks to Androxyde, [NUT], E:V:A and dotnetzip developers\n" +
+                "See xda-developers.com for more informations", "PRFCreator");
         }
 
         private void create_button_Click(object sender, EventArgs e)
@@ -116,6 +122,14 @@ namespace PRFCreator
                 options_checklist.Invoke(new MethodInvoker(delegate { options_checklist.Enabled = Enabled; }));
             else
                 options_checklist.Enabled = Enabled;
+            if (add_extra_button.InvokeRequired)
+                add_extra_button.Invoke(new MethodInvoker(delegate { add_extra_button.Enabled = Enabled; }));
+            else
+                add_extra_button.Enabled = Enabled;
+            if (remove_extra_button.InvokeRequired)
+                remove_extra_button.Invoke(new MethodInvoker(delegate { remove_extra_button.Enabled = Enabled; }));
+            else
+                remove_extra_button.Enabled = Enabled;
         }
 
         private void dr_button_Click(object sender, EventArgs e)
@@ -130,6 +144,30 @@ namespace PRFCreator
 
             rec_textbox.Text = openFileDialog1.FileName;
             openFileDialog1.FileName = string.Empty;
+        }
+
+        private void add_extra_button_Click(object sender, EventArgs e)
+        {
+            if (isWorking)
+                return;
+
+            openFileDialog1.Filter = "Zip Files|*.zip|All files|*";
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result != DialogResult.OK)
+                return;
+
+            if (!extra_listbox.Items.Contains(openFileDialog1.FileName))
+                extra_listbox.Items.Add(openFileDialog1.FileName);
+
+            openFileDialog1.FileName = string.Empty;
+        }
+
+        private void remove_extra_button_Click(object sender, EventArgs e)
+        {
+            if (isWorking)
+                return;
+
+            extra_listbox.Items.Remove(extra_listbox.SelectedItem);
         }
     }
 }
