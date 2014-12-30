@@ -11,11 +11,18 @@ namespace PRFCreator
     {
         public static bool ExistsInZip(string zipfile, string file)
         {
-            using (ZipFile zip = new ZipFile(zipfile))
+            try
             {
-                foreach (ZipEntry ze in zip.Entries)
-                    if (ze.FileName == file)
-                        return true;
+                using (ZipFile zip = new ZipFile(zipfile))
+                {
+                    foreach (ZipEntry ze in zip.Entries)
+                        if (ze.FileName == file)
+                            return true;
+                }
+            }
+            catch (Ionic.Zip.BadReadException)
+            {
+                Logger.WriteLog("Error: The zip file " + zipfile + " seems corrupt");
             }
             return false;
         }
