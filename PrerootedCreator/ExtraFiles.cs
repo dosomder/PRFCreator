@@ -78,7 +78,7 @@ namespace PRFCreator
             {
                 if (Zipping.ExistsInZip(ftffile, modem + ".sin"))
                 {
-                    ExtractAndAdd(worker, modem, string.Empty, ftffile);
+                    ExtractAndAdd(worker, modem, string.Empty, ftffile, "amss_fsg");
                     break;
                 }
             }
