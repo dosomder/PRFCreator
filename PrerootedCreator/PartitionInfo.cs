@@ -51,7 +51,7 @@ namespace PRFCreator
 
             Zipping.UnzipFile(worker, ftffile, "partition-image.sin", string.Empty, System.IO.Path.GetTempPath(), false);
 
-            using (Stream stream = new FileStream(System.IO.Path.GetTempPath() + "\\partition-image.sin", FileMode.Open, FileAccess.Read))
+            using (Stream stream = new FileStream(Path.Combine(Path.GetTempPath(), "partition-image.sin"), FileMode.Open, FileAccess.Read))
             using (BinaryReader br = new BinaryReader(stream))
                 ParsePInfo(br);
         }

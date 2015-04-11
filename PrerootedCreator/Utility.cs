@@ -13,7 +13,7 @@ namespace PRFCreator
         {
             try
             {
-                int exitcode = RunProcess("java.exe", "-version");
+                int exitcode = RunProcess("java", "-version");
                 if (exitcode != 0)
                     throw new ApplicationException("Error: Unexpected exit code: " + exitcode);
             }
@@ -82,11 +82,11 @@ namespace PRFCreator
         public static void EditScript(BackgroundWorker worker, string search, string replace)
         {
             Zipping.UnzipFile(worker, "flashable.zip", "updater-script", "META-INF/com/google/android", System.IO.Path.GetTempPath(), false);
-            string content = File.ReadAllText(System.IO.Path.GetTempPath() + "\\updater-script", Encoding.ASCII);
+            string content = File.ReadAllText(Path.Combine(Path.GetTempPath(), "updater-script"), Encoding.ASCII);
             content = content.Replace(search, replace);
-            File.WriteAllText(System.IO.Path.GetTempPath() + "\\updater-script", content, Encoding.ASCII);
-            Zipping.AddToZip(worker, "flashable.zip", System.IO.Path.GetTempPath() + "\\updater-script", "META-INF/com/google/android/updater-script", false);
-            File.Delete(System.IO.Path.GetTempPath() + "\\updater-script");
+            File.WriteAllText(Path.Combine(Path.GetTempPath(), "updater-script"), content, Encoding.ASCII);
+            Zipping.AddToZip(worker, "flashable.zip", Path.Combine(Path.GetTempPath(), "updater-script"), "META-INF/com/google/android/updater-script", false);
+            File.Delete(Path.Combine(Path.GetTempPath(), "updater-script"));
         }
 
         //http://stackoverflow.com/questions/2989400/store-files-in-c-sharp-exe-file

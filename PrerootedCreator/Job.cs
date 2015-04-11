@@ -93,7 +93,7 @@ namespace PRFCreator
             Logger.WriteLog("Extracting system.sin from " + System.IO.Path.GetFileName(form.ftf_textbox.Text));
             Zipping.UnzipFile(worker, form.ftf_textbox.Text, "system.sin", string.Empty, System.IO.Path.GetTempPath());
 
-            byte[] UUID = PartitionInfo.ReadSinUUID(System.IO.Path.GetTempPath() + "\\system.sin");
+            byte[] UUID = PartitionInfo.ReadSinUUID(Path.Combine(Path.GetTempPath(), "system.sin"));
             PartitionInfo.UsingUUID = (UUID != null);
             Utility.ScriptSetUUID(worker, "system", UUID);
         }
@@ -109,16 +109,16 @@ namespace PRFCreator
         private static void UnpackSystemEXT4(BackgroundWorker worker)
         {
             SetJobNum(++JobNum);
-            SinExtract.ExtractSin(worker, System.IO.Path.GetTempPath() + "\\system.sin", System.IO.Path.GetTempPath() + "\\system.ext4");
-            File.Delete(System.IO.Path.GetTempPath() + "\\system.sin");
+            SinExtract.ExtractSin(worker, Path.Combine(Path.GetTempPath(), "system.sin"), Path.Combine(Path.GetTempPath(), "system.ext4"));
+            File.Delete(Path.Combine(Path.GetTempPath(), "system.sin"));
         }
 
         private static void AddSystem(BackgroundWorker worker)
         {
             SetJobNum(++JobNum);
             Logger.WriteLog("Adding system to zip");
-            Zipping.AddToZip(worker, "flashable.zip", System.IO.Path.GetTempPath() + "\\system.ext4", "system.ext4");
-            File.Delete(System.IO.Path.GetTempPath() + "\\system.ext4");
+            Zipping.AddToZip(worker, "flashable.zip", Path.Combine(Path.GetTempPath(), "system.ext4"), "system.ext4");
+            File.Delete(Path.Combine(Path.GetTempPath(), "system.ext4"));
         }
 
         private static void AddExtras(BackgroundWorker worker)
@@ -183,7 +183,7 @@ namespace PRFCreator
             Utility.WriteResourceToFile("PRFCreator.Resources.testkey.x509.pem", "testkey.x509.pem");
 
             Logger.WriteLog("Signing zip file");
-            if (Utility.RunProcess("java.exe", "-Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 flashable.zip flashable-signed.zip") == 0)
+            if (Utility.RunProcess("java", "-Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 flashable.zip flashable-signed.zip") == 0)
                 File.Delete("flashable.zip");
             else
                 Logger.WriteLog("Error: Could not sign zip");

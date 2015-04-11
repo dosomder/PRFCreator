@@ -65,7 +65,7 @@ namespace PRFCreator
                 throw new DirectoryNotFoundException("Destination directory " + destination + " does not exist");
 
             //Ionic creates a tmp file and throws an exception if it already exists
-            File.Delete(destination + "\\" + file + ".tmp");
+            File.Delete(Path.Combine(destination, file + ".tmp"));
             using (ZipFile zip = ZipFile.Read(zipfile))
             {
                 if (showProgress)

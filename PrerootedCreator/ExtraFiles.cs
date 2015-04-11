@@ -95,19 +95,19 @@ namespace PRFCreator
             }
 
             Zipping.UnzipFile(worker, ftffile, name + ".sin", string.Empty, System.IO.Path.GetTempPath(), false);
-            if (File.Exists(System.IO.Path.GetTempPath() + "\\" + name + ".sin"))
+            if (File.Exists(Path.Combine(Path.GetTempPath(), name + ".sin")))
             {
                 Logger.WriteLog("   " + name);
-                SinExtract.ExtractSin(worker, System.IO.Path.GetTempPath() + "\\" + name + ".sin", System.IO.Path.GetTempPath() + "\\" + name + extension, false);
+                SinExtract.ExtractSin(worker, Path.Combine(Path.GetTempPath(), name + ".sin"), Path.Combine(Path.GetTempPath(), name + extension), false);
 
                 if (PartitionInfo.UsingUUID)
                 {
-                    byte[] UUID = PartitionInfo.ReadSinUUID(System.IO.Path.GetTempPath() + "\\" + name + ".sin");
+                    byte[] UUID = PartitionInfo.ReadSinUUID(Path.Combine(Path.GetTempPath(), name + ".sin"));
                     Utility.ScriptSetUUID(worker, (AsFilename == "" ? name : AsFilename), UUID);
                 }
 
-                File.Delete(System.IO.Path.GetTempPath() + "\\" + name + ".sin");
-                Zipping.AddToZip(worker, "flashable.zip", System.IO.Path.GetTempPath() + "\\" + name + extension, (AsFilename == "" ? name : AsFilename) + extension, false);
+                File.Delete(Path.Combine(Path.GetTempPath(), name + ".sin"));
+                Zipping.AddToZip(worker, "flashable.zip", Path.Combine(Path.GetTempPath(), name + extension), (AsFilename == "" ? name : AsFilename) + extension, false);
             }
         }
 
