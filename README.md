@@ -10,7 +10,7 @@ A pre-rooted firmware is a firmware, which already includes root. This is for ex
  * Androxyde - some helpful information about sin files from his flashtool
  * [NUT] - used his flashable scripts as base
  * E:V:A - sgdisk utility compiled for arm
- * [dotnetzip](http://dotnetzip.codeplex.com/) developers (note I'm using a slightly modifed version with a [bugfix](https://dotnetzip.codeplex.com/workitem/14087))
+ * [dotnetzip](http://dotnetzip.codeplex.com/) developers (note I'm using the active fork [DotNetZip.Semverd](https://github.com/haf/DotNetZip.Semverd))
 
 ### Requirements
  * .NET 3.0
