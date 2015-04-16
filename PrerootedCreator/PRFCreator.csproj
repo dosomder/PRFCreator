@@ -77,7 +77,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
+    <Reference Include="System.Deployment"  Condition=" '$(OS)' != 'Unix' " />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -154,11 +154,16 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>del "$(ProjectDir)Resources\flashable.zip"
+    <PreBuildEvent Condition=" '$(OS)' != 'Unix' " >del "$(ProjectDir)Resources\flashable.zip"
 "$(SolutionDir)compile-tools\7z.exe" a -r  "$(ProjectDir)Resources\flashable.zip" "$(SolutionDir)flashable.zip-files\*" -mx7</PreBuildEvent>
+    <PreBuildEvent Condition=" '$(OS)' == 'Unix' " >rm "$(ProjectDir)Resources\flashable.zip"
+cd "$(SolutionDir)flashable.zip-files\"
+zip -r -7 "$(ProjectDir)Resources\flashable.zip" .</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>move $(TargetDir)Resources\signapk.jar $(TargetDir)
+    <PostBuildEvent Condition=" '$(OS)' != 'Unix' " >move $(TargetDir)Resources\signapk.jar $(TargetDir)
+rmdir $(TargetDir)Resources</PostBuildEvent>
+    <PostBuildEvent Condition=" '$(OS)' == 'Unix' " >mv $(TargetDir)Resources\signapk.jar $(TargetDir)
 rmdir $(TargetDir)Resources</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
