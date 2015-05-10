@@ -91,7 +91,11 @@ namespace PRFCreator
         {
             SetJobNum(++JobNum);
             Logger.WriteLog("Extracting system.sin from " + System.IO.Path.GetFileName(form.ftf_textbox.Text));
-            Zipping.UnzipFile(worker, form.ftf_textbox.Text, "system.sin", string.Empty, System.IO.Path.GetTempPath());
+            if (!Zipping.UnzipFile(worker, form.ftf_textbox.Text, "system.sin", string.Empty, System.IO.Path.GetTempPath()))
+            {
+                worker.CancelAsync();
+                return;
+            }
 
             byte[] UUID = PartitionInfo.ReadSinUUID(Path.Combine(Path.GetTempPath(), "system.sin"));
             PartitionInfo.UsingUUID = (UUID != null);

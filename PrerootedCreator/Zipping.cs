@@ -57,7 +57,31 @@ namespace PRFCreator
             return string.Empty;
         }
 
-        public static void UnzipFile(BackgroundWorker worker, string zipfile, string file, string path, string destination, bool showProgress = true)
+        /// <summary> 
+        /// Unzip a file.
+        /// </summary> 
+        /// <param name="worker">
+        /// Backgroundworker to report progress to.
+        /// </param> 
+        /// <param name="zipfile">
+        /// A valid zip file.
+        /// </param> 
+        /// <param name="file">
+        /// File to unzip inside the zipfile.
+        /// </param> 
+        /// <param name="path">
+        /// Path to the file inside the zipfile.
+        /// </param>
+        /// <param name="destination">
+        /// Destination file name.
+        /// </param> 
+        /// <param name="showProgress">
+        /// Report progress to the background worker.
+        /// </param> 
+        /// <returns> 
+        /// Returns true on success and false if the zip file was not valid.
+        /// </returns> 
+        public static bool UnzipFile(BackgroundWorker worker, string zipfile, string file, string path, string destination, bool showProgress = true)
         {
             if (File.Exists(destination))
                 throw new ArgumentException("UnzipFile: Argument destination is expected to be a folder, not a file");
@@ -66,24 +90,36 @@ namespace PRFCreator
 
             //Ionic creates a tmp file and throws an exception if it already exists
             File.Delete(Path.Combine(destination, file + ".tmp"));
-            using (ZipFile zip = ZipFile.Read(zipfile))
+            try
             {
-                if (showProgress)
-                    zip.ExtractProgress += (o, e) =>
-                    {
-                        if (e.EventType == ZipProgressEventType.Extracting_EntryBytesWritten)
-                            worker.ReportProgress((int)((float)e.BytesTransferred / e.TotalBytesToTransfer * 100));
-                    };
-
-                zip.FlattenFoldersOnExtract = true;
-                ICollection<ZipEntry> zes = zip.SelectEntries("name = '" + file + "'", path);
-                foreach (ZipEntry ze in zes)
+                using (ZipFile zip = ZipFile.Read(zipfile))
                 {
-                    ze.Extract(destination, ExtractExistingFileAction.OverwriteSilently);
-                    //just extract one file
-                    break;
+                    if (showProgress)
+                        zip.ExtractProgress += (o, e) =>
+                        {
+                            if (e.EventType == ZipProgressEventType.Extracting_EntryBytesWritten)
+                                worker.ReportProgress((int)((float)e.BytesTransferred / e.TotalBytesToTransfer * 100));
+                        };
+
+                    zip.FlattenFoldersOnExtract = true;
+                    ICollection<ZipEntry> zes = zip.SelectEntries("name = '" + file + "'", path);
+                    foreach (ZipEntry ze in zes)
+                    {
+                        ze.Extract(destination, ExtractExistingFileAction.OverwriteSilently);
+                        //just extract one file
+                        break;
+                    }
                 }
             }
+            catch (Ionic.Zip.BadCrcException)
+            {
+                Logger.WriteLog("Error unzipping the file: " + zipfile + "\nPlease make sure it's a valid zip file or try redownloading the file");
+                System.Windows.Forms.MessageBox.Show("PRFCreator", "Error unzipping the file: " + zipfile + "\n" +
+                    "Please make sure it's a valid zip file or try redownloading the file", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
         }
 
         public static void AddToZip(BackgroundWorker worker, string zipfile, string FileToAdd, string AsFilename = "", bool showProgress = true)
