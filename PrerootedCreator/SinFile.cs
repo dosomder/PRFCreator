@@ -35,24 +35,28 @@ namespace PRFCreator
             return true;
         }
 
-        //Credits to Androxyde, took this method from his project 'Flashtool'
-        public static long GetFinalLength(BinaryReader br, int DataStart)
+        //Credits to Androxyde, took the idea for this method from his project 'Flashtool'
+        public static long GetFinalLength(FileStream fs)
         {
-            br.BaseStream.Position = DataStart;
+            fs.Position = 0;
             //ext4 superblock magic
             byte[] search = { 0x53, 0xEF };
-            int i = 0;
-            while (!Utility.byteArrayCompare(br.ReadBytes(2), search))
+            byte[] res = { 0, 0 };
+            while (!Utility.byteArrayCompare(res, search))
             {
-                i += 2;
-                if (i > 4096)
+                if (fs.Position > 8096)
                     //some sin files are not ext4 images
+                    return 0;
+
+                if (fs.Read(res, 0, 2) != 2)
                     return 0;
             }
 
-            br.BaseStream.Position -= 0x36;
+            fs.Position -= 0x36;
             //this is already little endian
-            long blockcount = br.ReadInt32();
+            byte[] c = new byte[4];
+            fs.Read(c, 0, 4);
+            long blockcount = BitConverter.ToInt32(c, 0);
             return (blockcount * 4 * 1024);
         }
 
@@ -94,13 +98,26 @@ namespace PRFCreator
                 return false;
         }
 
+        public static bool isCompressed(BlockInfoHeader BIH)
+        {
+            byte[] LZ4A = Encoding.ASCII.GetBytes("LZ4A");
+            if (Utility.byteArrayCompare(BIH.magic, LZ4A))
+                return true;
+            else
+                return false;
+        }
+
         public struct BlockInfoHeader
         {
-            //public byte[] ADDRmagic; //0x41, 0x44, 0x44, 0x52 -> ADDR
-            //public byte[] unknown;
+            public byte[] magic;
+            //0x4C, 0x5A, 0x34, 0x41 -> LZ4A (compressed)
+            //0x41, 0x44, 0x44, 0x52 -> ADDR (uncompressed)
+            public int BIHLength; //0x54 for LZ4A and 0x44 for ADDR
             public long dataStart;
+            public long blockSize; //only used in LZ4A
             public long dataLength;
-            public long dataDest; //Address of destination in new file, everything else in the file is 0xFF (kind of 'compression')
+            public long dataDest;
+            public long destLength; //only used in LZ4A, should be the same as blockSize
             //public int HashType; //not sure about that, if correct 2 = SHA256
             //public byte[] SHA256; //again SHA256 hash, probably for verifying in the destination
         }

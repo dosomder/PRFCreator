@@ -7,7 +7,8 @@ namespace PRFCreator
 {
     class SinFileV3
     {
-        private const int _BIHSize = 68;
+        private const int _BIHSize = 68; //0x44
+        private const int _BIHSizeCompressed = 84; //0x54
 
         public static int GetSinHeaderLength(BinaryReader br)
         {
@@ -15,37 +16,23 @@ namespace PRFCreator
             return Utility.ReadIntBigEndian(br);
         }
 
-        public static int GetBIHSize(BinaryReader br, int SinHeaderLength)
+        public static List<SinFile.BlockInfoHeader> GetBIHs(BinaryReader br)
         {
-            br.BaseStream.Position = SinHeaderLength;
-            int mmcflength = mmcfLength(br);
-            int gptplength = GPTPLength(br);
-            if ((mmcflength - gptplength) % _BIHSize != 0)
-                throw new Exception("Woot m8, so spooky");
-
-            return ((mmcflength - gptplength) / _BIHSize);
-        }
-
-        public static SinFile.BlockInfoHeader[] GetBIHs(BinaryReader br)
-        {
-            int size = GetBIHSize(br, GetSinHeaderLength(br));
+            int dataStart = GetDataStart(br);
             br.BaseStream.Position = GetBIHStart(br);
-            SinFile.BlockInfoHeader[] bihs = new SinFile.BlockInfoHeader[size];
-            for (int i = 0; i < size; i++)
-            {
-                bihs[i] = GetBIH(br);
-            }
+            List<SinFile.BlockInfoHeader> bihs = new List<SinFile.BlockInfoHeader>();
+
+            while (br.BaseStream.Position < dataStart)
+                bihs.Add(GetBIH(br));
+
             return bihs;
         }
 
         public static int GetDataStart(BinaryReader br)
         {
             int headerlength = GetSinHeaderLength(br);
-            //int sindataheaderlength = 16 + (GPTPLength(br) - 8) + 68 * GetBIHLength(br, sinheaderlength);
-            //first SinHeaderHash
-            br.BaseStream.Position = 24;
-            int sindataheaderlength = Utility.ReadIntBigEndian(br);
-            return (headerlength + sindataheaderlength);
+            int mmcflength = mmcfLength(br);
+            return (headerlength + mmcflength + 4 /*size of GPTP magic*/ + 4 /*size of mmcfLength*/);
         }
 
         public static byte[] GetUUID(BinaryReader br)
@@ -88,13 +75,21 @@ namespace PRFCreator
         private static SinFile.BlockInfoHeader GetBIH(BinaryReader br)
         {
             SinFile.BlockInfoHeader bih = new SinFile.BlockInfoHeader();
-            //skip for performance (is it even noticeable)
-            //bih.ADDRmagic = br.ReadBytes(4);
-            //bih.unknown = br.ReadBytes(4);
-            br.BaseStream.Position += 8;
+            bih.magic = br.ReadBytes(4);
+            bih.BIHLength = Utility.ReadIntBigEndian(br);
+            if (SinFile.isCompressed(bih) && bih.BIHLength != _BIHSizeCompressed)
+                throw new FormatException("woot, compressed bih is spooky");
+
             bih.dataStart = Utility.ReadLongBigEndian(br);
+
+            if (SinFile.isCompressed(bih))
+                bih.blockSize = Utility.ReadLongBigEndian(br);
             bih.dataLength = Utility.ReadLongBigEndian(br);
             bih.dataDest = Utility.ReadLongBigEndian(br);
+
+            if (SinFile.isCompressed(bih))
+                bih.destLength = Utility.ReadLongBigEndian(br);
+
             //skip for performance
             br.BaseStream.Position += 0x24;
             //bih.HashType = Utility.ReadIntBigEndian(br);

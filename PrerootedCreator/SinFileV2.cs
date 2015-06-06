@@ -17,18 +17,20 @@ namespace PRFCreator
         }
 
         //roughly taken from flashtool
-        public static SinFile.BlockInfoHeader[] GetBIHs(BinaryReader br)
+        public static List<SinFile.BlockInfoHeader> GetBIHs(BinaryReader br)
         {
             br.BaseStream.Position = 11;
             int BIHLength = Utility.ReadIntBigEndian(br);
             if (BIHLength % _BIHSize != 0)
                 throw new Exception("Woot m8, v2 too spooky");
 
-            SinFile.BlockInfoHeader[] bihs = new SinFile.BlockInfoHeader[BIHLength / _BIHSize];
-            for (int i = 0; i < bihs.Length; i++)
+            List<SinFile.BlockInfoHeader> bihs = new List<SinFile.BlockInfoHeader>();
+            for (int i = 0; i < (BIHLength / _BIHSize); i++)
             {
-                bihs[i].dataDest = Utility.ReadIntBigEndian(br);
-                bihs[i].dataLength = Utility.ReadIntBigEndian(br);
+                SinFile.BlockInfoHeader bih = new SinFile.BlockInfoHeader();
+                bih.dataDest = Utility.ReadIntBigEndian(br);
+                bih.dataLength = Utility.ReadIntBigEndian(br);
+                bihs.Add(bih);
                 br.BaseStream.Position += 0x21; //SHA256 and 1 unknown byte
             }
 

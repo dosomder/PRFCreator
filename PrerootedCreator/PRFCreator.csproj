@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PRFCreator</RootNamespace>
     <AssemblyName>PRFCreator</AssemblyName>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
@@ -75,9 +75,13 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="LZ4, Version=1.0.5.93, Culture=neutral, PublicKeyToken=fd2bda0a70c5a705, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\LZ4.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment"  Condition=" '$(OS)' != 'Unix' " />
+    <Reference Include="System.Deployment" Condition=" '$(OS)' != 'Unix' " />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -154,16 +158,16 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent Condition=" '$(OS)' != 'Unix' " >del "$(ProjectDir)Resources\flashable.zip"
+    <PreBuildEvent Condition=" '$(OS)' != 'Unix' ">del "$(ProjectDir)Resources\flashable.zip"
 "$(SolutionDir)compile-tools\7z.exe" a -r  "$(ProjectDir)Resources\flashable.zip" "$(SolutionDir)flashable.zip-files\*" -mx7</PreBuildEvent>
-    <PreBuildEvent Condition=" '$(OS)' == 'Unix' " >rm "$(ProjectDir)Resources\flashable.zip"
+    <PreBuildEvent Condition=" '$(OS)' == 'Unix' ">rm "$(ProjectDir)Resources\flashable.zip"
 cd "$(SolutionDir)flashable.zip-files\"
 zip -r -7 "$(ProjectDir)Resources\flashable.zip" .</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent Condition=" '$(OS)' != 'Unix' " >move $(TargetDir)Resources\signapk.jar $(TargetDir)
+    <PostBuildEvent Condition=" '$(OS)' != 'Unix' ">move $(TargetDir)Resources\signapk.jar $(TargetDir)
 rmdir $(TargetDir)Resources</PostBuildEvent>
-    <PostBuildEvent Condition=" '$(OS)' == 'Unix' " >mv $(TargetDir)Resources\signapk.jar $(TargetDir)
+    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">mv $(TargetDir)Resources\signapk.jar $(TargetDir)
 rmdir $(TargetDir)Resources</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
