@@ -40,9 +40,9 @@ namespace PRFCreator
         {
             JobNum = 0;
             int free = Utility.freeSpaceMB(Path.GetTempPath());
-            if (free < 3000)
+            if (free < 4096)
             {
-                Logger.WriteLog("Error: Not enough disk space. Please make sure that you have atleast 3GB free space on drive " + Path.GetPathRoot(Path.GetTempPath())
+                Logger.WriteLog("Error: Not enough disk space. Please make sure that you have atleast 4GB free space on drive " + Path.GetPathRoot(Path.GetTempPath())
                     + ". Currently you only have " + free + "MB available");
                 return;
             }
