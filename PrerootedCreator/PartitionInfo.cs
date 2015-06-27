@@ -19,13 +19,13 @@ namespace PRFCreator
                 _UsingUUID = value;
                 if (value)
                 {
-                    Zipping.RenameInZip("flashable.zip", "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-names");
-                    Zipping.RenameInZip("flashable.zip", "META-INF/com/google/android/updater-script-uuid", "META-INF/com/google/android/updater-script");
+                    Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-names");
+                    Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script-uuid", "META-INF/com/google/android/updater-script");
                 }
                 else
                 {
-                    Zipping.RenameInZip("flashable.zip", "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-uuid");
-                    Zipping.RenameInZip("flashable.zip", "META-INF/com/google/android/updater-script-names", "META-INF/com/google/android/updater-script");
+                    Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-uuid");
+                    Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script-names", "META-INF/com/google/android/updater-script");
                 }
             }
         }
@@ -49,9 +49,9 @@ namespace PRFCreator
                 return;
             }
 
-            Zipping.UnzipFile(worker, ftffile, "partition-image.sin", string.Empty, System.IO.Path.GetTempPath(), false);
+            Zipping.UnzipFile(worker, ftffile, "partition-image.sin", string.Empty, Utility.GetTempPath(), false);
 
-            using (Stream stream = new FileStream(Path.Combine(Path.GetTempPath(), "partition-image.sin"), FileMode.Open, FileAccess.Read))
+            using (Stream stream = new FileStream(Path.Combine(Utility.GetTempPath(), "partition-image.sin"), FileMode.Open, FileAccess.Read))
             using (BinaryReader br = new BinaryReader(stream))
                 ParsePInfo(br);
         }

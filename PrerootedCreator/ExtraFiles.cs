@@ -45,7 +45,7 @@ namespace PRFCreator
                 "endif;\n" +
                 "#InsertExtra\n";
             Utility.EditScript(worker, "#InsertExtra", cmd);
-            Zipping.AddToZip(worker, "flashable.zip", filename, fixedname, false);
+            Zipping.AddToZip(worker, Settings.destinationFile, filename, fixedname, false);
         }
 
         private static void AddKernel(BackgroundWorker worker, string ftffile)
@@ -94,20 +94,21 @@ namespace PRFCreator
                 return;
             }
 
-            Zipping.UnzipFile(worker, ftffile, name + ".sin", string.Empty, System.IO.Path.GetTempPath(), false);
-            if (File.Exists(Path.Combine(Path.GetTempPath(), name + ".sin")))
+            Zipping.UnzipFile(worker, ftffile, name + ".sin", string.Empty, Utility.GetTempPath(), false);
+            if (File.Exists(Path.Combine(Utility.GetTempPath(), name + ".sin")))
             {
                 Logger.WriteLog("   " + name);
-                SinExtract.ExtractSin(worker, Path.Combine(Path.GetTempPath(), name + ".sin"), Path.Combine(Path.GetTempPath(), name + extension), false);
+                SinExtract.ExtractSin(worker, Path.Combine(Utility.GetTempPath(), name + ".sin"), Path.Combine(Utility.GetTempPath(), name + extension), false);
 
                 if (PartitionInfo.UsingUUID)
                 {
-                    byte[] UUID = PartitionInfo.ReadSinUUID(Path.Combine(Path.GetTempPath(), name + ".sin"));
+                    byte[] UUID = PartitionInfo.ReadSinUUID(Path.Combine(Utility.GetTempPath(), name + ".sin"));
                     Utility.ScriptSetUUID(worker, (AsFilename == "" ? name : AsFilename), UUID);
                 }
 
-                File.Delete(Path.Combine(Path.GetTempPath(), name + ".sin"));
-                Zipping.AddToZip(worker, "flashable.zip", Path.Combine(Path.GetTempPath(), name + extension), (AsFilename == "" ? name : AsFilename) + extension, false);
+                File.Delete(Path.Combine(Utility.GetTempPath(), name + ".sin"));
+                Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), name + extension), (AsFilename == "" ? name : AsFilename) + extension, false);
+                File.Delete(Path.Combine(Utility.GetTempPath(), name + extension));
             }
         }
 

@@ -23,6 +23,7 @@ namespace PRFCreator
             openFileDialog1.Multiselect = false;
 
             Logger.form = Job.form = this;
+            Settings.ReadSettings();
         }
 
         private void ftf_button_Click(object sender, EventArgs e)
@@ -85,10 +86,23 @@ namespace PRFCreator
             {
                 Logger.WriteLog("Info: No updater-script found in Recovery zip. Are you sure it's a flashable zip?");
             }
-            Utility.WriteResourceToFile("PRFCreator.Resources.flashable.zip", "flashable.zip");
-            if (!System.IO.File.Exists("flashable.zip"))
+
+            if (Settings.saveDialog)
             {
-                Logger.WriteLog("Error: Can not find flashable.zip in the same directory");
+                using (SaveFileDialog sfd = new SaveFileDialog())
+                {
+                    sfd.Filter = "Zip Files (*.zip)|*.zip";
+                    if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                        return;
+
+                    Settings.destinationFile = sfd.FileName;
+                }
+            }
+
+            Utility.WriteResourceToFile("PRFCreator.Resources.flashable.zip", Settings.destinationFile);
+            if (!System.IO.File.Exists(Settings.destinationFile))
+            {
+                Logger.WriteLog("Error: Unable to extract flashable.zip from the exe");
                 return;
             }
 

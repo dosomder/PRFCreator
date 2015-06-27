@@ -9,6 +9,20 @@ namespace PRFCreator
 {
     static class Utility
     {
+        public static string GetTempPath()
+        {
+            if (string.IsNullOrEmpty(Settings.templocation))
+                return Path.GetTempPath();
+            else
+                return Settings.templocation;
+        }
+
+        public static void SetZipTempFolder(Ionic.Zip.ZipFile zf)
+        {
+            if (!string.IsNullOrEmpty(Settings.templocation))
+                zf.TempFileFolder = Settings.templocation;
+        }
+
         public static bool JavaInstalled()
         {
             try
@@ -81,12 +95,12 @@ namespace PRFCreator
 
         public static void EditScript(BackgroundWorker worker, string search, string replace)
         {
-            Zipping.UnzipFile(worker, "flashable.zip", "updater-script", "META-INF/com/google/android", System.IO.Path.GetTempPath(), false);
-            string content = File.ReadAllText(Path.Combine(Path.GetTempPath(), "updater-script"), Encoding.ASCII);
+            Zipping.UnzipFile(worker, Settings.destinationFile, "updater-script", "META-INF/com/google/android", Utility.GetTempPath(), false);
+            string content = File.ReadAllText(Path.Combine(Utility.GetTempPath(), "updater-script"), Encoding.ASCII);
             content = content.Replace(search, replace);
-            File.WriteAllText(Path.Combine(Path.GetTempPath(), "updater-script"), content, Encoding.ASCII);
-            Zipping.AddToZip(worker, "flashable.zip", Path.Combine(Path.GetTempPath(), "updater-script"), "META-INF/com/google/android/updater-script", false);
-            File.Delete(Path.Combine(Path.GetTempPath(), "updater-script"));
+            File.WriteAllText(Path.Combine(Utility.GetTempPath(), "updater-script"), content, Encoding.ASCII);
+            Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "updater-script"), "META-INF/com/google/android/updater-script", false);
+            File.Delete(Path.Combine(Utility.GetTempPath(), "updater-script"));
         }
 
         //http://stackoverflow.com/questions/2989400/store-files-in-c-sharp-exe-file

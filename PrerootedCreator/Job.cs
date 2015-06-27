@@ -39,10 +39,10 @@ namespace PRFCreator
         public static void Worker()
         {
             JobNum = 0;
-            int free = Utility.freeSpaceMB(Path.GetTempPath());
+            int free = Utility.freeSpaceMB(Utility.GetTempPath());
             if (free < 4096)
             {
-                Logger.WriteLog("Error: Not enough disk space. Please make sure that you have atleast 4GB free space on drive " + Path.GetPathRoot(Path.GetTempPath())
+                Logger.WriteLog("Error: Not enough disk space. Please make sure that you have atleast 4GB free space on drive " + Path.GetPathRoot(Utility.GetTempPath())
                     + ". Currently you only have " + free + "MB available");
                 return;
             }
@@ -91,13 +91,13 @@ namespace PRFCreator
         {
             SetJobNum(++JobNum);
             Logger.WriteLog("Extracting system.sin from " + System.IO.Path.GetFileName(form.ftf_textbox.Text));
-            if (!Zipping.UnzipFile(worker, form.ftf_textbox.Text, "system.sin", string.Empty, System.IO.Path.GetTempPath()))
+            if (!Zipping.UnzipFile(worker, form.ftf_textbox.Text, "system.sin", string.Empty, Utility.GetTempPath()))
             {
                 worker.CancelAsync();
                 return;
             }
 
-            byte[] UUID = PartitionInfo.ReadSinUUID(Path.Combine(Path.GetTempPath(), "system.sin"));
+            byte[] UUID = PartitionInfo.ReadSinUUID(Path.Combine(Utility.GetTempPath(), "system.sin"));
             PartitionInfo.UsingUUID = (UUID != null);
             Utility.ScriptSetUUID(worker, "system", UUID);
         }
@@ -113,16 +113,16 @@ namespace PRFCreator
         private static void UnpackSystemEXT4(BackgroundWorker worker)
         {
             SetJobNum(++JobNum);
-            SinExtract.ExtractSin(worker, Path.Combine(Path.GetTempPath(), "system.sin"), Path.Combine(Path.GetTempPath(), "system.ext4"));
-            File.Delete(Path.Combine(Path.GetTempPath(), "system.sin"));
+            SinExtract.ExtractSin(worker, Path.Combine(Utility.GetTempPath(), "system.sin"), Path.Combine(Utility.GetTempPath(), "system.ext4"));
+            File.Delete(Path.Combine(Utility.GetTempPath(), "system.sin"));
         }
 
         private static void AddSystem(BackgroundWorker worker)
         {
             SetJobNum(++JobNum);
             Logger.WriteLog("Adding system to zip");
-            Zipping.AddToZip(worker, "flashable.zip", Path.Combine(Path.GetTempPath(), "system.ext4"), "system.ext4");
-            File.Delete(Path.Combine(Path.GetTempPath(), "system.ext4"));
+            Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "system.ext4"), "system.ext4");
+            File.Delete(Path.Combine(Utility.GetTempPath(), "system.ext4"));
         }
 
         private static void AddExtras(BackgroundWorker worker)
@@ -151,7 +151,7 @@ namespace PRFCreator
             SetJobNum(++JobNum);
             Logger.WriteLog("Adding " + Path.GetFileName(form.su_textbox.Text));
             string superSUFile = form.su_textbox.Text;
-            Zipping.AddToZip(worker, "flashable.zip", superSUFile, "SuperSU.zip", false);
+            Zipping.AddToZip(worker, Settings.destinationFile, superSUFile, "SuperSU.zip", false);
         }
 
         private static void AddRecovery(BackgroundWorker worker)
@@ -162,7 +162,7 @@ namespace PRFCreator
             SetJobNum(++JobNum);
             string recoveryFile = form.rec_textbox.Text;
             Logger.WriteLog("Adding " + Path.GetFileName(recoveryFile));
-            Zipping.AddToZip(worker, "flashable.zip", recoveryFile, "dualrecovery.zip");
+            Zipping.AddToZip(worker, Settings.destinationFile, recoveryFile, "dualrecovery.zip");
         }
 
         //~ doubles the process time
@@ -188,7 +188,7 @@ namespace PRFCreator
 
             Logger.WriteLog("Signing zip file");
             if (Utility.RunProcess("java", "-Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 flashable.zip flashable-prerooted-signed.zip") == 0)
-                File.Delete("flashable.zip");
+                File.Delete(Settings.destinationFile);
             else
                 Logger.WriteLog("Error: Could not sign zip");
 
@@ -198,8 +198,8 @@ namespace PRFCreator
 
         private static void Complete(BackgroundWorker worker)
         {
-            if (File.Exists("flashable.zip"))
-                File.Move("flashable.zip", "flashable-prerooted.zip");
+            if (File.Exists(Settings.destinationFile) && !File.Exists("flashable-prerooted.zip") && Settings.destinationFile == "flashable.zip")
+                File.Move(Settings.destinationFile, "flashable-prerooted.zip");
 
             Logger.WriteLog("Finished\n");
         }

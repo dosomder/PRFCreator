@@ -7,11 +7,6 @@ namespace PRFCreator
 {
     class Logger
     {
-        /*private static Form1 form;
-        public Logger(Form1 _form)
-        {
-            form = _form;
-        }*/
         public static Form1 form;
 
         private static string GetTimeDate()

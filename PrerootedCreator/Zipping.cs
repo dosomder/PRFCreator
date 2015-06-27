@@ -32,6 +32,7 @@ namespace PRFCreator
         {
             using (ZipFile zip = new ZipFile(zipfile))
             {
+                Utility.SetZipTempFolder(zip);
                 ICollection<ZipEntry> zipEntries = zip.SelectEntries("name = '" + oldfile + "'");
                 if (zipEntries.Count == 0)
                     return false;
@@ -130,6 +131,8 @@ namespace PRFCreator
             bool exists = ExistsInZip(zipfile, AsFilename == "" ? FileToAdd : AsFilename);
             using (ZipFile zip = new ZipFile(zipfile))
             {
+                Utility.SetZipTempFolder(zip);
+
                 if (exists)
                     zip.RemoveEntry(AsFilename == "" ? FileToAdd : AsFilename);
                 ZipEntry ze = zip.AddFile(FileToAdd, "");
