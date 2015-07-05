@@ -18,7 +18,7 @@ namespace PRFCreator
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            version_label.Text = "v0.8";
+            version_label.Text = "v0.9";
             openFileDialog1.FileName = string.Empty;
             openFileDialog1.Multiselect = false;
 
