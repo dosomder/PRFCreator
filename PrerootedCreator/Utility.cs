@@ -64,7 +64,7 @@ namespace PRFCreator
 
         public static void ScriptSetUUID(BackgroundWorker worker, string old, byte[] UUID)
         {
-            if (!PartitionInfo.UsingUUID)
+            if (PartitionInfo.ScriptMode != PartitionInfo.Mode.LegacyUUID )
                 return;
 
             old = old.ToUpper() + "UUID";

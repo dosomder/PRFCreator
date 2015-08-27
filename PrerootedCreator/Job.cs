@@ -35,7 +35,9 @@ namespace PRFCreator
             return count;
         }
 
-        private static Action<BackgroundWorker>[] jobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddSystem, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, SignZip, Complete };
+        private static Action<BackgroundWorker>[] legacyjobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddSystemEXT4, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, SignZip, Complete };
+        private static Action<BackgroundWorker>[] newjobs = { UnpackSystem, EditScript, AddSystem, UnpackPartitionImage, AddParititonImage, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, SignZip, Complete };
+        private static Action<BackgroundWorker>[] jobs = newjobs;
         public static void Worker()
         {
             JobNum = 0;
@@ -59,6 +61,10 @@ namespace PRFCreator
                     try
                     {
                         form.ControlsEnabled(false);
+                        if (form.options_checklist.CheckedItems.Contains("Legacy mode"))
+                            jobs = legacyjobs;
+                        else
+                            jobs = newjobs;
                         foreach (Action<BackgroundWorker> action in jobs)
                         {
                             if (worker.CancellationPending)
@@ -98,8 +104,19 @@ namespace PRFCreator
             }
 
             byte[] UUID = PartitionInfo.ReadSinUUID(Path.Combine(Utility.GetTempPath(), "system.sin"));
-            PartitionInfo.UsingUUID = (UUID != null);
+            PartitionInfo.ScriptMode = (UUID != null) ? PartitionInfo.Mode.LegacyUUID : PartitionInfo.Mode.Legacy;
             Utility.ScriptSetUUID(worker, "system", UUID);
+        }
+
+        private static void UnpackPartitionImage(BackgroundWorker worker)
+        {
+            SetJobNum(++JobNum);
+            Logger.WriteLog("Extracting partition-image.sin from " + System.IO.Path.GetFileName(form.ftf_textbox.Text));
+            if (!Zipping.UnzipFile(worker, form.ftf_textbox.Text, "partition-image.sin", string.Empty, Utility.GetTempPath()))
+            {
+                worker.CancelAsync();
+                return;
+            }
         }
 
         private static void EditScript(BackgroundWorker worker)
@@ -117,12 +134,30 @@ namespace PRFCreator
             File.Delete(Path.Combine(Utility.GetTempPath(), "system.sin"));
         }
 
-        private static void AddSystem(BackgroundWorker worker)
+        private static void AddSystemEXT4(BackgroundWorker worker)
         {
             SetJobNum(++JobNum);
             Logger.WriteLog("Adding system to zip");
             Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "system.ext4"), "system.ext4");
             File.Delete(Path.Combine(Utility.GetTempPath(), "system.ext4"));
+        }
+
+        private static void AddSystem(BackgroundWorker worker)
+        {
+            SetJobNum(++JobNum);
+            Logger.WriteLog("Adding system to zip");
+            Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "system.sin"), "system.sin", true, Ionic.Zlib.CompressionLevel.None);
+            File.Delete(Path.Combine(Utility.GetTempPath(), "system.sin"));
+
+            PartitionInfo.ScriptMode = PartitionInfo.Mode.Sinflash;
+        }
+
+        private static void AddParititonImage(BackgroundWorker worker)
+        {
+            SetJobNum(++JobNum);
+            Logger.WriteLog("Adding partition-image to zip");
+            Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "partition-image.sin"), "partition-image.sin");
+            File.Delete(Path.Combine(Utility.GetTempPath(), "partition-image.sin"));
         }
 
         private static void AddExtras(BackgroundWorker worker)

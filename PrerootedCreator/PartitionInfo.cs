@@ -10,23 +10,38 @@ namespace PRFCreator
     {
         //public static PartInfo[] pinfo = null;
         //public static bool UsingUUID { get { return (pinfo != null); } }
-        private static bool _UsingUUID = true;
-        public static bool UsingUUID 
+        public enum Mode { Sinflash, Legacy, LegacyUUID };
+        private static Mode _ScriptMode = Mode.Sinflash;
+        public static Mode ScriptMode 
         { 
-            get { return _UsingUUID; }
+            get { return _ScriptMode; }
             set 
             {
-                _UsingUUID = value;
-                if (value)
+                switch(value)
                 {
-                    Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-names");
-                    Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script-uuid", "META-INF/com/google/android/updater-script");
+                    case Mode.LegacyUUID:
+                        if (_ScriptMode == Mode.Legacy)
+                            Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-names");
+                        else if(_ScriptMode == Mode.Sinflash)
+                            Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-sinflash");
+                        Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script-uuid", "META-INF/com/google/android/updater-script");
+                        break;
+                    case Mode.Legacy:
+                        if (_ScriptMode == Mode.LegacyUUID)
+                            Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-uuid");
+                        else if(_ScriptMode == Mode.Sinflash)
+                            Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-sinflash");
+                        Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script-names", "META-INF/com/google/android/updater-script");
+                        break;
+                    case Mode.Sinflash:
+                        if (_ScriptMode == Mode.Legacy)
+                            Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-names");
+                        else if (_ScriptMode == Mode.LegacyUUID)
+                            Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-uuid");
+                        Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script-sinflash", "META-INF/com/google/android/updater-script");
+                        break;
                 }
-                else
-                {
-                    Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script", "META-INF/com/google/android/updater-script-uuid");
-                    Zipping.RenameInZip(Settings.destinationFile, "META-INF/com/google/android/updater-script-names", "META-INF/com/google/android/updater-script");
-                }
+                _ScriptMode = value;
             }
         }
 

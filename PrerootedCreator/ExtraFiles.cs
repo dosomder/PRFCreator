@@ -50,13 +50,24 @@ namespace PRFCreator
 
         private static void AddKernel(BackgroundWorker worker, string ftffile)
         {
-            ExtractAndAdd(worker, "kernel", ".elf", ftffile, "boot");
-            ExtractAndAdd(worker, "rpm", ".elf", ftffile);
+            if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
+            {
+                ExtractAndAddSin(worker, "kernel", ftffile, "boot");
+                ExtractAndAddSin(worker, "rpm", ftffile);
+            }
+            else
+            {
+                ExtractAndAdd(worker, "kernel", ".elf", ftffile, "boot");
+                ExtractAndAdd(worker, "rpm", ".elf", ftffile);
+            }
         }
 
         private static void AddFOTAKernel(BackgroundWorker worker, string ftffile)
         {
-            ExtractAndAdd(worker, "fotakernel", ".elf", ftffile);
+            if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
+                ExtractAndAddSin(worker, "fotakernel", ftffile);
+            else
+                ExtractAndAdd(worker, "fotakernel", ".elf", ftffile);
         }
 
         private static void AddLTALabel(BackgroundWorker worker, string ftffile)
@@ -67,7 +78,11 @@ namespace PRFCreator
                 Logger.WriteLog("   Error: Could not find LTALabel in FTF");
                 return;
             }
-            ExtractAndAdd(worker, Path.GetFileNameWithoutExtension(ltalname), ".ext4", ftffile, "ltalabel");
+
+            if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
+                ExtractAndAddSin(worker, Path.GetFileNameWithoutExtension(ltalname), ftffile, "ltalabel");
+            else
+                ExtractAndAdd(worker, Path.GetFileNameWithoutExtension(ltalname), ".ext4", ftffile, "ltalabel");
         }
 
         private static void AddModem(BackgroundWorker worker, string ftffile)
@@ -78,12 +93,24 @@ namespace PRFCreator
             {
                 if (Zipping.ExistsInZip(ftffile, modem + ".sin"))
                 {
-                    ExtractAndAdd(worker, modem, string.Empty, ftffile, "amss_fsg");
+                    if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
+                        ExtractAndAddSin(worker, modem, ftffile, "amss_fsg");
+                    else
+                        ExtractAndAdd(worker, modem, string.Empty, ftffile, "amss_fsg");
                     break;
                 }
             }
-            ExtractAndAdd(worker, "amss_fs_1", string.Empty, ftffile);
-            ExtractAndAdd(worker, "amss_fs_2", string.Empty, ftffile);
+
+            if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
+            {
+                ExtractAndAddSin(worker, "amss_fs_1", ftffile);
+                ExtractAndAddSin(worker, "amss_fs_2", ftffile);
+            }
+            else
+            {
+                ExtractAndAdd(worker, "amss_fs_1", string.Empty, ftffile);
+                ExtractAndAdd(worker, "amss_fs_2", string.Empty, ftffile);
+            }
         }
 
         private static void ExtractAndAdd(BackgroundWorker worker, string name, string extension, string ftffile, string AsFilename = "")
@@ -100,7 +127,7 @@ namespace PRFCreator
                 Logger.WriteLog("   " + name);
                 SinExtract.ExtractSin(worker, Path.Combine(Utility.GetTempPath(), name + ".sin"), Path.Combine(Utility.GetTempPath(), name + extension), false);
 
-                if (PartitionInfo.UsingUUID)
+                if (PartitionInfo.ScriptMode == PartitionInfo.Mode.LegacyUUID)
                 {
                     byte[] UUID = PartitionInfo.ReadSinUUID(Path.Combine(Utility.GetTempPath(), name + ".sin"));
                     Utility.ScriptSetUUID(worker, (AsFilename == "" ? name : AsFilename), UUID);
@@ -112,13 +139,31 @@ namespace PRFCreator
             }
         }
 
+        private static void ExtractAndAddSin(BackgroundWorker worker, string name, string ftffile, string AsFilename = "")
+        {
+            if (Zipping.ExistsInZip(ftffile, name + ".sin") == false)
+            {
+                OnError(name, AsFilename);
+                return;
+            }
+
+            Zipping.UnzipFile(worker, ftffile, name + ".sin", string.Empty, Utility.GetTempPath(), false);
+            if (File.Exists(Path.Combine(Utility.GetTempPath(), name + ".sin")))
+            {
+                Logger.WriteLog("   " + name);
+                Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), name + ".sin"), (AsFilename == "" ? name : AsFilename) + ".sin", false, Ionic.Zlib.CompressionLevel.None);
+                File.Delete(Path.Combine(Utility.GetTempPath(), name + ".sin"));
+            }
+        }
+
         private static void OnError(string name, string AsFilename = "")
         {
             switch (name)
             {
                 case "rpm":
                     //rpm seems to be missing in older firmwares, so we don't display it as error
-                    Logger.WriteLog("   Info: Could not find " + ((AsFilename == "") ? name : AsFilename));
+                    //in newer firmwares, rpm is moved to boot files
+                    //Logger.WriteLog("   Info: Could not find " + ((AsFilename == "") ? name : AsFilename));
                     break;
                 default:
                     Logger.WriteLog("   Error: Could not find " + ((AsFilename == "") ? name : AsFilename));

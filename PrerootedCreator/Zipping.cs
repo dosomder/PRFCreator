@@ -123,7 +123,7 @@ namespace PRFCreator
             return true;
         }
 
-        public static void AddToZip(BackgroundWorker worker, string zipfile, string FileToAdd, string AsFilename = "", bool showProgress = true)
+        public static void AddToZip(BackgroundWorker worker, string zipfile, string FileToAdd, string AsFilename = "", bool showProgress = true, Ionic.Zlib.CompressionLevel complevel = Ionic.Zlib.CompressionLevel.Default)
         {
             if (!File.Exists(zipfile))
                 throw new FileNotFoundException("Zipfile " + zipfile + " does not exist");
@@ -132,6 +132,9 @@ namespace PRFCreator
             using (ZipFile zip = new ZipFile(zipfile))
             {
                 Utility.SetZipTempFolder(zip);
+                //intended as an optimization for sinflash to use STORED
+                //disabling for now since sinflash does not yet support zip access
+                //zip.CompressionLevel = complevel;
 
                 if (exists)
                     zip.RemoveEntry(AsFilename == "" ? FileToAdd : AsFilename);

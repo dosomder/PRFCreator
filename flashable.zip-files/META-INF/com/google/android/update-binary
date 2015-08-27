@@ -10,6 +10,7 @@ ZIP="$3"
 cd /tmp
 echo "version=$1" > prfargs
 echo "outfile=$2" >> prfargs
+echo "zip=$3" >> prfargs
 
 mkdir -p prf
 cd prf

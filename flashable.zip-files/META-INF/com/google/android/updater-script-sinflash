@@ -1,0 +1,152 @@
+ui_print(" ");ui_print(" ");
+ui_print("===========================================");
+ui_print("|                                         |");
+ui_print("|       *** Pre-Rooted firmware ***       |");
+ui_print("|INSERT FIRMWARE HERE|");
+ui_print("|                                         |");
+ui_print("|         Created with PRFCreator         |");
+ui_print("|                by zxz0O0                |");
+ui_print("|                                         |");
+ui_print("===========================================");
+
+ui_print("");
+show_progress(1.000000, 0);
+
+ui_print("Extracting files...");
+package_extract_file("utils/busybox", "/tmp/busybox");
+package_extract_file("utils/sinflash", "/tmp/sinflash");
+package_extract_file("partition-image.sin", "/tmp/partition-image.sin");
+set_perm(0, 0, 0755, "/tmp/busybox");
+set_perm(0, 0, 0755, "/tmp/sinflash");
+run_program("/tmp/busybox", "mkdir", "/sdcard/prfc");
+set_progress(0.050000);
+ui_print("PRF is using sinflash");
+
+# ===================== System =====================
+ui_print("Installing firmware. This might take a while...");
+set_progress(0.150000);
+
+if
+	package_extract_file("system.sin", "/sdcard/prfc/system.sin") == "t"
+then
+	if
+		run_program("/tmp/sinflash", "/sdcard/prfc/system.sin", "/tmp/partition-image.sin") != "0"
+	then
+		abort("Error flashing system.sin");
+	else
+		ui_print("System flashed.");
+	endif;
+	delete("/sdcard/prfc/system.sin");
+endif;
+set_progress(0.550000);
+
+# ===================== LTALabel =====================
+if
+	package_extract_file("ltalabel.sin", "/sdcard/prfc/ltalabel.sin") == "t"
+then
+	if
+		run_program("/tmp/sinflash", "/sdcard/prfc/ltalabel.sin", "/tmp/partition-image.sin") != "0"
+	then
+		abort("Error flashing ltalabel.sin");
+	else
+		ui_print("LTALabel flashed.");
+	endif;
+endif;
+set_progress(0.600000);
+
+# ===================== FOTAKernel =====================
+if
+	package_extract_file("fotakernel.sin", "/sdcard/prfc/fotakernel.sin") == "t"
+then
+	if
+		run_program("/tmp/sinflash", "/sdcard/prfc/fotakernel.sin", "/tmp/partition-image.sin") != "0"
+	then
+		abort("Error flashing fotakernel.sin");
+	else
+		ui_print("FOTAKernel flashed.");
+	endif;
+endif;
+set_progress(0.650000);
+
+# ===================== Kernel & rpm =====================
+if
+	package_extract_file("boot.sin", "/sdcard/prfc/boot.sin") == "t"
+then
+	if
+		run_program("/tmp/sinflash", "/sdcard/prfc/boot.sin", "/tmp/partition-image.sin") != "0"
+	then
+		abort("Error flashing kernel.sin");
+	else
+		if
+			package_extract_file("rpm.sin", "/sdcard/prfc/rpm.sin") == "t"
+		then
+			if
+				run_program("/tmp/sinflash", "/sdcard/prfc/rpm.sin", "/tmp/partition-image.sin") != "0"
+			then
+				abort("Error flashing rpm.sin");
+			endif;
+			ui_print("RPM flashed.");
+		endif;
+		ui_print("Kernel flashed.");
+	endif;
+endif;
+set_progress(0.700000);
+
+# ===================== Modem =====================
+# There are some cases where modem partitions have different names. So we use UUID
+if
+	package_extract_file("amss_fsg.sin", "/sdcard/prfc/amss_fsg.sin") == "t"
+then
+	if
+		run_program("/tmp/sinflash", "/sdcard/prfc/amss_fsg.sin", "/tmp/partition-image.sin") != "0"
+	then
+		abort("Error flashing modem");
+	endif;
+	ui_print("Modem flashed.");
+	if
+		package_extract_file("amss_fs_1.sin", "/sdcard/prfc/amss_fs_1.sin") == "t"
+	then
+		run_program("/tmp/sinflash", "/sdcard/prfc/amss_fs_1.sin", "/tmp/partition-image.sin");
+	endif;
+	if
+		package_extract_file("amss_fs_2.sin", "/sdcard/prfc/amss_fs_2.sin") == "t"
+	then
+		run_program("/tmp/sinflash", "/sdcard/prfc/amss_fs_2.sin", "/tmp/partition-image.sin");
+	endif;
+endif;
+
+# ===================== Clean up =====================
+set_progress(0.900000);
+ui_print("Cleaning up...");
+unmount("/system");
+unmount("/System");
+delete_recursive("/sdcard/prfc");
+
+set_progress(1.000000);
+ui_print("Finished!");
+ui_print("Launching SuperSU and Recovery zip");
+ui_print(" ");
+
+# ===================== SuperSU =====================
+package_extract_file("SuperSU.zip", "/tmp/SuperSU.zip");
+run_program("/tmp/busybox", "mkdir", "/tmp/SuperSU_extracted");
+run_program("/tmp/busybox", "unzip", "-d", "/tmp/SuperSU_extracted", "/tmp/SuperSU.zip");
+set_perm(0, 0, 0755, "/tmp/SuperSU_extracted/META-INF/com/google/android/update-binary");
+run_program("/tmp/SuperSU_extracted/META-INF/com/google/android/update-binary", "dummy", file_getprop("/tmp/prfargs", "outfile"), "/tmp/SuperSU.zip");
+delete_recursive("/tmp/SuperSU_extracted");
+delete("/tmp/SuperSU.zip");
+
+# ===================== Recovery (optional) =====================
+if
+	package_extract_file("dualrecovery.zip", "/tmp/dualrecovery.zip") == "t"
+then
+	run_program("/tmp/busybox", "mkdir", "/tmp/dualrecovery_extracted");
+	run_program("/tmp/busybox", "unzip", "-d", "/tmp/dualrecovery_extracted", "/tmp/dualrecovery.zip");
+	set_perm(0, 0, 0755, "/tmp/dualrecovery_extracted/META-INF/com/google/android/update-binary");
+	run_program("/tmp/dualrecovery_extracted/META-INF/com/google/android/update-binary", file_getprop("/tmp/prfargs", "version"), file_getprop("/tmp/prfargs", "outfile"), "/tmp/dualrecovery.zip");
+	delete_recursive("/tmp/dualrecovery_extracted");
+	delete("/tmp/dualrecovery.zip");
+endif;
+
+# ===================== Extra Flashable =====================
+#InsertExtra

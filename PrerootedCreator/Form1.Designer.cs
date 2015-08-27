@@ -123,9 +123,9 @@
             // 
             // create_button
             // 
-            this.create_button.Location = new System.Drawing.Point(518, 394);
+            this.create_button.Location = new System.Drawing.Point(510, 394);
             this.create_button.Name = "create_button";
-            this.create_button.Size = new System.Drawing.Size(79, 23);
+            this.create_button.Size = new System.Drawing.Size(75, 23);
             this.create_button.TabIndex = 8;
             this.create_button.Text = "Create";
             this.create_button.UseVisualStyleBackColor = true;
@@ -138,7 +138,7 @@
             this.status_textbox.Location = new System.Drawing.Point(15, 262);
             this.status_textbox.Name = "status_textbox";
             this.status_textbox.ReadOnly = true;
-            this.status_textbox.Size = new System.Drawing.Size(582, 129);
+            this.status_textbox.Size = new System.Drawing.Size(588, 129);
             this.status_textbox.TabIndex = 9;
             this.status_textbox.Text = "";
             // 
@@ -191,7 +191,7 @@
             // 
             this.job_label.AutoSize = true;
             this.job_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.job_label.Location = new System.Drawing.Point(457, 397);
+            this.job_label.Location = new System.Drawing.Point(455, 397);
             this.job_label.Name = "job_label";
             this.job_label.Size = new System.Drawing.Size(30, 15);
             this.job_label.TabIndex = 15;
@@ -201,7 +201,7 @@
             // 
             this.jobnum_label.AutoSize = true;
             this.jobnum_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.jobnum_label.Location = new System.Drawing.Point(485, 397);
+            this.jobnum_label.Location = new System.Drawing.Point(483, 397);
             this.jobnum_label.Name = "jobnum_label";
             this.jobnum_label.Size = new System.Drawing.Size(0, 15);
             this.jobnum_label.TabIndex = 16;
@@ -240,7 +240,7 @@
             this.groupBox2.Location = new System.Drawing.Point(495, 9);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(102, 104);
+            this.groupBox2.Size = new System.Drawing.Size(108, 104);
             this.groupBox2.TabIndex = 21;
             this.groupBox2.TabStop = false;
             // 
@@ -249,13 +249,13 @@
             this.groupBox3.Controls.Add(this.options_checklist);
             this.groupBox3.Location = new System.Drawing.Point(495, 105);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(102, 51);
+            this.groupBox3.Size = new System.Drawing.Size(108, 51);
             this.groupBox3.TabIndex = 23;
             this.groupBox3.TabStop = false;
             // 
             // add_extra_button
             // 
-            this.add_extra_button.Location = new System.Drawing.Point(495, 30);
+            this.add_extra_button.Location = new System.Drawing.Point(495, 33);
             this.add_extra_button.Name = "add_extra_button";
             this.add_extra_button.Size = new System.Drawing.Size(75, 23);
             this.add_extra_button.TabIndex = 25;
@@ -265,7 +265,7 @@
             // 
             // remove_extra_button
             // 
-            this.remove_extra_button.Location = new System.Drawing.Point(495, 63);
+            this.remove_extra_button.Location = new System.Drawing.Point(495, 66);
             this.remove_extra_button.Name = "remove_extra_button";
             this.remove_extra_button.Size = new System.Drawing.Size(75, 23);
             this.remove_extra_button.TabIndex = 26;
@@ -281,14 +281,14 @@
             this.groupBox4.Controls.Add(this.add_extra_button);
             this.groupBox4.Location = new System.Drawing.Point(15, 157);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(582, 94);
+            this.groupBox4.Size = new System.Drawing.Size(588, 99);
             this.groupBox4.TabIndex = 27;
             this.groupBox4.TabStop = false;
             // 
             // extra_listbox
             // 
             this.extra_listbox.FormattingEnabled = true;
-            this.extra_listbox.Location = new System.Drawing.Point(6, 30);
+            this.extra_listbox.Location = new System.Drawing.Point(6, 33);
             this.extra_listbox.Name = "extra_listbox";
             this.extra_listbox.Size = new System.Drawing.Size(474, 56);
             this.extra_listbox.TabIndex = 28;
@@ -297,7 +297,7 @@
             // 
             this.extra_lbl.AutoSize = true;
             this.extra_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
-            this.extra_lbl.Location = new System.Drawing.Point(6, 10);
+            this.extra_lbl.Location = new System.Drawing.Point(6, 15);
             this.extra_lbl.Name = "extra_lbl";
             this.extra_lbl.Size = new System.Drawing.Size(55, 15);
             this.extra_lbl.TabIndex = 15;
@@ -330,17 +330,18 @@
             this.options_checklist.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.options_checklist.FormattingEnabled = true;
             this.options_checklist.Items.AddRange(new object[] {
-            "Sign zip"});
+            "Sign zip",
+            "Legacy mode"});
             this.options_checklist.Location = new System.Drawing.Point(6, 12);
             this.options_checklist.Name = "options_checklist";
-            this.options_checklist.Size = new System.Drawing.Size(90, 16);
+            this.options_checklist.Size = new System.Drawing.Size(96, 32);
             this.options_checklist.TabIndex = 22;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(611, 426);
+            this.ClientSize = new System.Drawing.Size(615, 426);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.version_label);
             this.Controls.Add(this.groupBox2);
