@@ -25,7 +25,7 @@ namespace PRFCreator
             int count = jobs.Length - 1; //don't count 'Complete'
             if (form.include_checklist.CheckedItems.Count < 1) //if there are no extra files
                 count--;
-            if (form.options_checklist.CheckedItems.Count < 1)
+            if (!form.options_checklist.CheckedItems.Contains("Sign zip"))
                 count--;
             if (!File.Exists(form.rec_textbox.Text)) //if recovery is not included
                 count--;
@@ -114,6 +114,7 @@ namespace PRFCreator
             Logger.WriteLog("Extracting partition-image.sin from " + System.IO.Path.GetFileName(form.ftf_textbox.Text));
             if (!Zipping.UnzipFile(worker, form.ftf_textbox.Text, "partition-image.sin", string.Empty, Utility.GetTempPath()))
             {
+                Logger.WriteLog("Error extracting partition-image.sin from ftf. Please try Legacy Mode");
                 worker.CancelAsync();
                 return;
             }

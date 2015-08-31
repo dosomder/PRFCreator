@@ -80,7 +80,7 @@ namespace PRFCreator
         /// Report progress to the background worker.
         /// </param> 
         /// <returns> 
-        /// Returns true on success and false if the zip file was not valid.
+        /// Returns true on success and false if the zip file was not valid or the file to extract does not exist.
         /// </returns> 
         public static bool UnzipFile(BackgroundWorker worker, string zipfile, string file, string path, string destination, bool showProgress = true)
         {
@@ -104,6 +104,8 @@ namespace PRFCreator
 
                     zip.FlattenFoldersOnExtract = true;
                     ICollection<ZipEntry> zes = zip.SelectEntries("name = '" + file + "'", path);
+                    if (zes.Count < 1)
+                        return false;
                     foreach (ZipEntry ze in zes)
                     {
                         ze.Extract(destination, ExtractExistingFileAction.OverwriteSilently);

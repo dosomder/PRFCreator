@@ -100,6 +100,8 @@ namespace PRFCreator
 
         public static bool isCompressed(BlockInfoHeader BIH)
         {
+            if (BIH.magic == null)
+                return false;
             byte[] LZ4A = Encoding.ASCII.GetBytes("LZ4A");
             if (Utility.byteArrayCompare(BIH.magic, LZ4A))
                 return true;
