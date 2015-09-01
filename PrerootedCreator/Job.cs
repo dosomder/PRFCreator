@@ -114,9 +114,14 @@ namespace PRFCreator
             Logger.WriteLog("Extracting partition-image.sin from " + System.IO.Path.GetFileName(form.ftf_textbox.Text));
             if (!Zipping.UnzipFile(worker, form.ftf_textbox.Text, "partition-image.sin", string.Empty, Utility.GetTempPath()))
             {
-                Logger.WriteLog("Error extracting partition-image.sin from ftf. Please try Legacy Mode");
-                worker.CancelAsync();
-                return;
+                if (Zipping.UnzipFile(worker, form.ftf_textbox.Text, "partition.sin", string.Empty, Utility.GetTempPath()))
+                    File.Move(Path.Combine(Utility.GetTempPath(), "partition.sin"), Path.Combine(Utility.GetTempPath(), "partition-image.sin"));
+                else
+                {
+                    Logger.WriteLog("Error extracting partition-image.sin from ftf. Please try Legacy Mode");
+                    worker.CancelAsync();
+                    return;
+                }
             }
         }
 
