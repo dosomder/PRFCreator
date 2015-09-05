@@ -48,16 +48,29 @@ namespace PRFCreator
             Zipping.AddToZip(worker, Settings.destinationFile, filename, fixedname, false);
         }
 
+        private static string GetKernelFilename(string ftffile)
+        {
+            string[] names = { "kernel", "boot" };
+            foreach (string name in names)
+            {
+                if (Zipping.ExistsInZip(ftffile, name + ".sin"))
+                    return name;
+            }
+
+            //if nothing exists, return kernel anyway so the error message makes sense
+            return "kernel";
+        }
+
         private static void AddKernel(BackgroundWorker worker, string ftffile)
         {
             if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
             {
-                ExtractAndAddSin(worker, "kernel", ftffile, "boot");
+                ExtractAndAddSin(worker, GetKernelFilename(ftffile), ftffile, "boot");
                 ExtractAndAddSin(worker, "rpm", ftffile);
             }
             else
             {
-                ExtractAndAdd(worker, "kernel", ".elf", ftffile, "boot");
+                ExtractAndAdd(worker, GetKernelFilename(ftffile), ".elf", ftffile, "boot");
                 ExtractAndAdd(worker, "rpm", ".elf", ftffile);
             }
         }
@@ -85,29 +98,29 @@ namespace PRFCreator
                 ExtractAndAdd(worker, Path.GetFileNameWithoutExtension(ltalname), ".ext4", ftffile, "ltalabel");
         }
 
-        private static void AddModem(BackgroundWorker worker, string ftffile)
+        private static string GetModemFilename(string ftffile)
         {
-            //different firmwares have different sin files
             string[] mdms = { "amss_fsg", "amss_fs_3", "modem" };
-            foreach (string modem in mdms)
+            foreach (string mdm in mdms)
             {
-                if (Zipping.ExistsInZip(ftffile, modem + ".sin"))
-                {
-                    if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
-                        ExtractAndAddSin(worker, modem, ftffile, "amss_fsg");
-                    else
-                        ExtractAndAdd(worker, modem, string.Empty, ftffile, "amss_fsg");
-                    break;
-                }
+                if (Zipping.ExistsInZip(ftffile, mdm + ".sin"))
+                    return mdm;
             }
 
+            return "modem";
+        }
+
+        private static void AddModem(BackgroundWorker worker, string ftffile)
+        {
             if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
             {
+                ExtractAndAddSin(worker, GetModemFilename(ftffile), ftffile, "amss_fsg");
                 ExtractAndAddSin(worker, "amss_fs_1", ftffile);
                 ExtractAndAddSin(worker, "amss_fs_2", ftffile);
             }
             else
             {
+                ExtractAndAdd(worker, GetModemFilename(ftffile), string.Empty, ftffile, "amss_fsg");
                 ExtractAndAdd(worker, "amss_fs_1", string.Empty, ftffile);
                 ExtractAndAdd(worker, "amss_fs_2", string.Empty, ftffile);
             }

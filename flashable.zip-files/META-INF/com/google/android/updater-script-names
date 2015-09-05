@@ -113,8 +113,6 @@ endif;
 # ===================== Clean up =====================
 set_progress(0.900000);
 ui_print("Cleaning up...");
-unmount("/system");
-unmount("/System");
 delete_recursive("/sdcard/prfc");
 
 set_progress(1.000000);
