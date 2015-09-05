@@ -93,7 +93,6 @@ endif;
 set_progress(0.700000);
 
 # ===================== Modem =====================
-# There are some cases where modem partitions have different names. So we use UUID
 if
 	package_extract_file("amss_fsg.sin", "/sdcard/prfc/amss_fsg.sin") == "t"
 then
