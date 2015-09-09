@@ -3,10 +3,6 @@
 #this is a wrapper for update-binary to catch version and outfile
 #part of PRFCreator by zxz0O0
 
-VERSION="$1"
-OUTFILE="$2"
-ZIP="$3"
-
 cd /tmp
 echo "version=$1" > prfargs
 echo "outfile=$2" >> prfargs
