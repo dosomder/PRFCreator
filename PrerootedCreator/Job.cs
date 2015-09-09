@@ -36,7 +36,7 @@ namespace PRFCreator
         }
 
         private static Action<BackgroundWorker>[] legacyjobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddSystemEXT4, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, SignZip, Complete };
-        private static Action<BackgroundWorker>[] newjobs = { UnpackSystem, EditScript, AddSystem, UnpackPartitionImage, AddParititonImage, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, SignZip, Complete };
+        private static Action<BackgroundWorker>[] newjobs = { UnpackSystem, AddSystem, EditScript, UnpackPartitionImage, AddParititonImage, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, SignZip, Complete };
         private static Action<BackgroundWorker>[] jobs = newjobs;
         public static void Worker()
         {
