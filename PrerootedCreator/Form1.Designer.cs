@@ -52,14 +52,17 @@
             this.add_extra_button = new System.Windows.Forms.Button();
             this.remove_extra_button = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.extra_listbox = new System.Windows.Forms.ListBox();
             this.extra_lbl = new System.Windows.Forms.Label();
+            this.extra_dataGridView = new System.Windows.Forms.DataGridView();
+            this.GridViewName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GridViewType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.include_checklist = new PRFCreator.CustomCheckedListBox();
             this.options_checklist = new PRFCreator.CustomCheckedListBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.extra_dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // ftf_label
@@ -123,7 +126,7 @@
             // 
             // create_button
             // 
-            this.create_button.Location = new System.Drawing.Point(510, 394);
+            this.create_button.Location = new System.Drawing.Point(510, 411);
             this.create_button.Name = "create_button";
             this.create_button.Size = new System.Drawing.Size(75, 23);
             this.create_button.TabIndex = 8;
@@ -135,7 +138,7 @@
             // 
             this.status_textbox.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.status_textbox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.status_textbox.Location = new System.Drawing.Point(15, 262);
+            this.status_textbox.Location = new System.Drawing.Point(15, 279);
             this.status_textbox.Name = "status_textbox";
             this.status_textbox.ReadOnly = true;
             this.status_textbox.Size = new System.Drawing.Size(588, 129);
@@ -144,7 +147,7 @@
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(15, 397);
+            this.progressBar.Location = new System.Drawing.Point(15, 414);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(435, 16);
             this.progressBar.TabIndex = 10;
@@ -191,7 +194,7 @@
             // 
             this.job_label.AutoSize = true;
             this.job_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.job_label.Location = new System.Drawing.Point(455, 397);
+            this.job_label.Location = new System.Drawing.Point(455, 414);
             this.job_label.Name = "job_label";
             this.job_label.Size = new System.Drawing.Size(30, 15);
             this.job_label.TabIndex = 15;
@@ -201,7 +204,7 @@
             // 
             this.jobnum_label.AutoSize = true;
             this.jobnum_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.jobnum_label.Location = new System.Drawing.Point(483, 397);
+            this.jobnum_label.Location = new System.Drawing.Point(483, 414);
             this.jobnum_label.Name = "jobnum_label";
             this.jobnum_label.Size = new System.Drawing.Size(0, 15);
             this.jobnum_label.TabIndex = 16;
@@ -255,7 +258,7 @@
             // 
             // add_extra_button
             // 
-            this.add_extra_button.Location = new System.Drawing.Point(495, 33);
+            this.add_extra_button.Location = new System.Drawing.Point(495, 49);
             this.add_extra_button.Name = "add_extra_button";
             this.add_extra_button.Size = new System.Drawing.Size(75, 23);
             this.add_extra_button.TabIndex = 25;
@@ -265,7 +268,7 @@
             // 
             // remove_extra_button
             // 
-            this.remove_extra_button.Location = new System.Drawing.Point(495, 66);
+            this.remove_extra_button.Location = new System.Drawing.Point(495, 78);
             this.remove_extra_button.Name = "remove_extra_button";
             this.remove_extra_button.Size = new System.Drawing.Size(75, 23);
             this.remove_extra_button.TabIndex = 26;
@@ -275,23 +278,14 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.extra_listbox);
             this.groupBox4.Controls.Add(this.extra_lbl);
             this.groupBox4.Controls.Add(this.remove_extra_button);
             this.groupBox4.Controls.Add(this.add_extra_button);
             this.groupBox4.Location = new System.Drawing.Point(15, 157);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(588, 99);
+            this.groupBox4.Size = new System.Drawing.Size(588, 116);
             this.groupBox4.TabIndex = 27;
             this.groupBox4.TabStop = false;
-            // 
-            // extra_listbox
-            // 
-            this.extra_listbox.FormattingEnabled = true;
-            this.extra_listbox.Location = new System.Drawing.Point(6, 33);
-            this.extra_listbox.Name = "extra_listbox";
-            this.extra_listbox.Size = new System.Drawing.Size(474, 56);
-            this.extra_listbox.TabIndex = 28;
             // 
             // extra_lbl
             // 
@@ -302,6 +296,47 @@
             this.extra_lbl.Size = new System.Drawing.Size(55, 15);
             this.extra_lbl.TabIndex = 15;
             this.extra_lbl.Text = "Extra Zip";
+            // 
+            // extra_dataGridView
+            // 
+            this.extra_dataGridView.AllowUserToAddRows = false;
+            this.extra_dataGridView.AllowUserToDeleteRows = false;
+            this.extra_dataGridView.AllowUserToResizeColumns = false;
+            this.extra_dataGridView.AllowUserToResizeRows = false;
+            this.extra_dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.extra_dataGridView.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.extra_dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.extra_dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.extra_dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.GridViewName,
+            this.GridViewType});
+            this.extra_dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.extra_dataGridView.Location = new System.Drawing.Point(21, 190);
+            this.extra_dataGridView.MultiSelect = false;
+            this.extra_dataGridView.Name = "extra_dataGridView";
+            this.extra_dataGridView.RowHeadersVisible = false;
+            this.extra_dataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
+            this.extra_dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.extra_dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.extra_dataGridView.ShowEditingIcon = false;
+            this.extra_dataGridView.Size = new System.Drawing.Size(474, 68);
+            this.extra_dataGridView.TabIndex = 29;
+            // 
+            // GridViewName
+            // 
+            this.GridViewName.HeaderText = "Name";
+            this.GridViewName.Name = "GridViewName";
+            this.GridViewName.ReadOnly = true;
+            this.GridViewName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // GridViewType
+            // 
+            this.GridViewType.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.GridViewType.FillWeight = 25F;
+            this.GridViewType.HeaderText = "Type";
+            this.GridViewType.Name = "GridViewType";
+            this.GridViewType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.GridViewType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // include_checklist
             // 
@@ -341,7 +376,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(615, 426);
+            this.ClientSize = new System.Drawing.Size(615, 442);
+            this.Controls.Add(this.extra_dataGridView);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.version_label);
             this.Controls.Add(this.groupBox2);
@@ -365,6 +401,7 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.extra_dataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -398,7 +435,9 @@
         private System.Windows.Forms.Button remove_extra_button;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label extra_lbl;
-        public System.Windows.Forms.ListBox extra_listbox;
+        public System.Windows.Forms.DataGridView extra_dataGridView;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GridViewName;
+        private System.Windows.Forms.DataGridViewComboBoxColumn GridViewType;
     }
 }
 

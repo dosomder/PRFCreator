@@ -147,3 +147,21 @@ endif;
 
 # ===================== Extra Flashable =====================
 #InsertExtra
+
+
+ui_print(" ");
+mount("/data");
+if
+	package_extract_dir("data/app", "/data/app") == "t"
+then
+	ui_print("Apps installed to Data");
+endif;
+
+run_program("/tmp/busybox", "blockdev", "--setrw", "/dev/block/platform/msm_sdcc.1/by-name/system");
+run_program("/tmp/busybox", "mount", "/system");
+if
+	package_extract_dir("system/app", "/system/app") == "t"
+then
+	ui_print("Apps installed to System");
+endif;
+

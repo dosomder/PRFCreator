@@ -144,6 +144,19 @@ namespace PRFCreator
                 remove_extra_button.Invoke(new MethodInvoker(delegate { remove_extra_button.Enabled = Enabled; }));
             else
                 remove_extra_button.Enabled = Enabled;
+
+            if (extra_dataGridView.InvokeRequired)
+                extra_dataGridView.Invoke(new MethodInvoker(delegate { DataGridViewEnabled(extra_dataGridView, "GridViewType", Enabled); }));
+            else
+                DataGridViewEnabled(extra_dataGridView, "GridViewType", Enabled);
+        }
+
+        private void DataGridViewEnabled(DataGridView dgr, string ColumnName, bool Enabled)
+        {
+            for (int i = 0; i < dgr.Rows.Count; i++)
+            {
+                dgr[ColumnName, i].ReadOnly = !Enabled;
+            }
         }
 
         private void dr_button_Click(object sender, EventArgs e)
@@ -160,18 +173,53 @@ namespace PRFCreator
             openFileDialog1.FileName = string.Empty;
         }
 
+        private bool dataGridViewContains(DataGridView dgr, string columnName, string match)
+        {
+            for (int i = 0; i < dgr.Rows.Count; i++)
+            {
+                if (dgr[columnName, i].Value.ToString() == match)
+                    return true;
+            }
+
+            return false;
+        }
+
         private void add_extra_button_Click(object sender, EventArgs e)
         {
             if (isWorking)
                 return;
 
-            openFileDialog1.Filter = "Zip Files|*.zip|All files|*";
+            openFileDialog1.Filter = "ZIP / APK Files|*.zip;*.apk|All files|*";
             DialogResult result = openFileDialog1.ShowDialog();
             if (result != DialogResult.OK)
                 return;
 
-            if (!extra_listbox.Items.Contains(openFileDialog1.FileName))
-                extra_listbox.Items.Add(openFileDialog1.FileName);
+            if (!dataGridViewContains(extra_dataGridView, "GridViewName", openFileDialog1.FileName))
+            {
+                if (openFileDialog1.FileName.EndsWith(".zip"))
+                {
+                    int row = extra_dataGridView.Rows.Add();
+                    extra_dataGridView.Rows[row].Cells["GridViewName"].Value = openFileDialog1.FileName;
+                    DataGridViewComboBoxCell dgvcbc = (DataGridViewComboBoxCell)extra_dataGridView.Rows[row].Cells["GridViewType"];
+                    dgvcbc.Items.Add("Flashable zip");
+                    dgvcbc.Value = "Flashable zip";
+
+                }
+                else if (openFileDialog1.FileName.EndsWith(".apk"))
+                {
+                    int row = extra_dataGridView.Rows.Add();
+                    extra_dataGridView.Rows[row].Cells["GridViewName"].Value = openFileDialog1.FileName;
+                    DataGridViewComboBoxCell dgvcbc = (DataGridViewComboBoxCell)extra_dataGridView.Rows[row].Cells["GridViewType"];
+                    dgvcbc.Items.Add("App (System)");
+                    dgvcbc.Items.Add("App (Data)");
+                    dgvcbc.Value = "App (Data)";
+                }
+                else
+                {
+                    Logger.WriteLog("Error adding extra file " + openFileDialog1.FileName + ": Unknown file type");
+                    return;
+                }
+            }
 
             openFileDialog1.FileName = string.Empty;
         }
@@ -181,7 +229,8 @@ namespace PRFCreator
             if (isWorking)
                 return;
 
-            extra_listbox.Items.Remove(extra_listbox.SelectedItem);
+            if (extra_dataGridView.SelectedRows.Count > 0)
+                extra_dataGridView.Rows.Remove(extra_dataGridView.SelectedRows[0]);
         }
     }
 }

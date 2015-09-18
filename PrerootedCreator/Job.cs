@@ -29,7 +29,7 @@ namespace PRFCreator
                 count--;
             if (!File.Exists(form.rec_textbox.Text)) //if recovery is not included
                 count--;
-            if (form.extra_listbox.Items.Count < 1) //no additional zip files
+            if (form.extra_dataGridView.Rows.Count < 1) //no additional zip files
                 count--;
 
             return count;
@@ -179,12 +179,19 @@ namespace PRFCreator
 
         private static void AddExtraFlashable(BackgroundWorker worker)
         {
-            if (form.extra_listbox.Items.Count < 1)
+            if(form.extra_dataGridView.Rows.Count < 1)
                 return;
 
             SetJobNum(++JobNum);
-            foreach (string file in form.extra_listbox.Items)
-                ExtraFiles.AddExtraFlashable(worker, file, form.ftf_textbox.Text);
+            for (int i = 0; i < form.extra_dataGridView.Rows.Count; i++)
+            {
+                string type = form.extra_dataGridView["GridViewType", i].Value.ToString();
+                string name = form.extra_dataGridView["GridViewName", i].Value.ToString();
+                if (type == "Flashable zip")
+                    ExtraFiles.AddExtraFlashable(worker, name);
+                else
+                    ExtraFiles.AddAPKFile(worker, name, type);
+            }
         }
 
         private static void AddSuperSU(BackgroundWorker worker)

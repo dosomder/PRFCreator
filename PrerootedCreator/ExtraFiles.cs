@@ -27,7 +27,16 @@ namespace PRFCreator
             }
         }
 
-        public static void AddExtraFlashable(BackgroundWorker worker, string filename, string ftffile)
+        public static void AddAPKFile(BackgroundWorker worker, string filename, string type)
+        {
+            Logger.WriteLog("Adding APK: " + Path.GetFileName(filename));
+            if (type == "App (System)")
+                Zipping.AddToZip(worker, Settings.destinationFile, filename, "system/app/" + Path.GetFileName(filename), false);
+            else
+                Zipping.AddToZip(worker, Settings.destinationFile, filename, "data/app/" + Path.GetFileName(filename), false);
+        }
+
+        public static void AddExtraFlashable(BackgroundWorker worker, string filename)
         {
             Logger.WriteLog("Adding flashable zip: " + Path.GetFileName(filename));
             string fixedname = Path.GetFileName(filename).Replace(' ', '_');
