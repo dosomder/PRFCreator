@@ -126,7 +126,7 @@
             // 
             // create_button
             // 
-            this.create_button.Location = new System.Drawing.Point(510, 411);
+            this.create_button.Location = new System.Drawing.Point(510, 406);
             this.create_button.Name = "create_button";
             this.create_button.Size = new System.Drawing.Size(75, 23);
             this.create_button.TabIndex = 8;
@@ -138,7 +138,7 @@
             // 
             this.status_textbox.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.status_textbox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.status_textbox.Location = new System.Drawing.Point(15, 279);
+            this.status_textbox.Location = new System.Drawing.Point(15, 274);
             this.status_textbox.Name = "status_textbox";
             this.status_textbox.ReadOnly = true;
             this.status_textbox.Size = new System.Drawing.Size(588, 129);
@@ -147,7 +147,7 @@
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(15, 414);
+            this.progressBar.Location = new System.Drawing.Point(15, 409);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(435, 16);
             this.progressBar.TabIndex = 10;
@@ -194,7 +194,7 @@
             // 
             this.job_label.AutoSize = true;
             this.job_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.job_label.Location = new System.Drawing.Point(455, 414);
+            this.job_label.Location = new System.Drawing.Point(455, 409);
             this.job_label.Name = "job_label";
             this.job_label.Size = new System.Drawing.Size(30, 15);
             this.job_label.TabIndex = 15;
@@ -204,7 +204,7 @@
             // 
             this.jobnum_label.AutoSize = true;
             this.jobnum_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.jobnum_label.Location = new System.Drawing.Point(483, 414);
+            this.jobnum_label.Location = new System.Drawing.Point(483, 409);
             this.jobnum_label.Name = "jobnum_label";
             this.jobnum_label.Size = new System.Drawing.Size(0, 15);
             this.jobnum_label.TabIndex = 16;
@@ -283,7 +283,7 @@
             this.groupBox4.Controls.Add(this.add_extra_button);
             this.groupBox4.Location = new System.Drawing.Point(15, 157);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(588, 116);
+            this.groupBox4.Size = new System.Drawing.Size(588, 111);
             this.groupBox4.TabIndex = 27;
             this.groupBox4.TabStop = false;
             // 
@@ -293,9 +293,9 @@
             this.extra_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
             this.extra_lbl.Location = new System.Drawing.Point(6, 15);
             this.extra_lbl.Name = "extra_lbl";
-            this.extra_lbl.Size = new System.Drawing.Size(55, 15);
+            this.extra_lbl.Size = new System.Drawing.Size(64, 15);
             this.extra_lbl.TabIndex = 15;
-            this.extra_lbl.Text = "Extra Zip";
+            this.extra_lbl.Text = "Extra Files";
             // 
             // extra_dataGridView
             // 
@@ -376,7 +376,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(615, 442);
+            this.ClientSize = new System.Drawing.Size(615, 436);
             this.Controls.Add(this.extra_dataGridView);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.version_label);

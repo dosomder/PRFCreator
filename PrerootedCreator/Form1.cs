@@ -159,6 +159,17 @@ namespace PRFCreator
             }
         }
 
+        private bool dataGridViewContains(DataGridView dgr, string columnName, string match)
+        {
+            for (int i = 0; i < dgr.Rows.Count; i++)
+            {
+                if (dgr[columnName, i].Value.ToString() == match)
+                    return true;
+            }
+
+            return false;
+        }
+
         private void dr_button_Click(object sender, EventArgs e)
         {
             if (isWorking)
@@ -171,17 +182,6 @@ namespace PRFCreator
 
             rec_textbox.Text = openFileDialog1.FileName;
             openFileDialog1.FileName = string.Empty;
-        }
-
-        private bool dataGridViewContains(DataGridView dgr, string columnName, string match)
-        {
-            for (int i = 0; i < dgr.Rows.Count; i++)
-            {
-                if (dgr[columnName, i].Value.ToString() == match)
-                    return true;
-            }
-
-            return false;
         }
 
         private void add_extra_button_Click(object sender, EventArgs e)
