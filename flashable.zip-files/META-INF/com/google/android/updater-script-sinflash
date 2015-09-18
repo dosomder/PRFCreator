@@ -1,7 +1,7 @@
 ui_print(" ");ui_print(" ");
 ui_print("===========================================");
 ui_print("|                                         |");
-ui_print("|       *** Pre-Rooted firmware ***       |");
+ui_print("|       *** Pre-Rooted Firmware ***       |");
 ui_print("|INSERT FIRMWARE HERE|");
 ui_print("|                                         |");
 ui_print("|         Created with PRFCreator         |");
@@ -18,6 +18,7 @@ package_extract_file("utils/sinflash", "/tmp/sinflash");
 package_extract_file("partition-image.sin", "/tmp/partition-image.sin");
 set_perm(0, 0, 0755, "/tmp/busybox");
 set_perm(0, 0, 0755, "/tmp/sinflash");
+mount("/data");
 run_program("/tmp/busybox", "mkdir", "/sdcard/prfc");
 set_progress(0.050000);
 ui_print("PRF is using sinflash");
@@ -123,6 +124,9 @@ set_progress(1.000000);
 ui_print("Finished!");
 ui_print("Launching SuperSU and Recovery zip");
 ui_print(" ");
+
+run_program("/tmp/busybox", "blockdev", "--setrw", "/dev/block/platform/msm_sdcc.1/by-name/system");
+run_program("/tmp/busybox", "mount", "/system");
 
 # ===================== SuperSU =====================
 package_extract_file("SuperSU.zip", "/tmp/SuperSU.zip");
