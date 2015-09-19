@@ -135,8 +135,7 @@ namespace PRFCreator
             {
                 Utility.SetZipTempFolder(zip);
                 //intended as an optimization for sinflash to use STORED
-                //disabling for now since sinflash does not yet support zip access
-                //zip.CompressionLevel = complevel;
+                zip.CompressionLevel = complevel;
 
                 if (exists)
                     zip.RemoveEntry(AsFilename == "" ? FileToAdd : AsFilename);
