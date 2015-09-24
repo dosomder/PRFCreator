@@ -16,9 +16,11 @@ ui_print("Extracting files...");
 package_extract_file("utils/busybox", "/tmp/busybox");
 package_extract_file("utils/sgdisk", "/tmp/sgdisk");
 package_extract_file("utils/create-uuidlinks.sh", "/tmp/create-uuidlinks.sh");
+package_extract_file("utils/flash_apps.sh", "/tmp/flash_apps.sh");
 set_perm(0, 0, 0755, "/tmp/busybox");
 set_perm(0, 0, 0755, "/tmp/sgdisk");
 set_perm(0, 0, 0755, "/tmp/create-uuidlinks.sh");
+set_perm(0, 0, 0755, "/tmp/flash_apps.sh");
 set_progress(0.050000);
 mount("/data");
 run_program("/tmp/busybox", "mkdir", "/sdcard/prfc");
@@ -150,17 +152,10 @@ endif;
 
 ui_print(" ");
 mount("/data");
-if
-	package_extract_dir("data/app", "/data/app") == "t"
-then
-	ui_print("Apps installed to Data");
-endif;
-
 run_program("/tmp/busybox", "blockdev", "--setrw", "/dev/block/platform/msm_sdcc.1/by-name/system");
 run_program("/tmp/busybox", "mount", "/system");
 if
-	package_extract_dir("system/app", "/system/app") == "t"
+	run_program("/tmp/flash_apps.sh", file_getprop("/tmp/prfargs", "zip")) == "0"
 then
-	ui_print("Apps installed to System");
+	ui_print("Apps installed to /data and/or /system");
 endif;
-
