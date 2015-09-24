@@ -35,8 +35,8 @@ namespace PRFCreator
             return count;
         }
 
-        private static Action<BackgroundWorker>[] legacyjobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddSystemEXT4, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, SignZip, Complete };
-        private static Action<BackgroundWorker>[] newjobs = { UnpackSystem, AddSystem, EditScript, UnpackPartitionImage, AddParititonImage, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, SignZip, Complete };
+        private static Action<BackgroundWorker>[] legacyjobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, AddSystemEXT4, SignZip, Complete };
+        private static Action<BackgroundWorker>[] newjobs = { UnpackSystem, EditScript, UnpackPartitionImage, AddParititonImage, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, AddSystem, SignZip, Complete };
         private static Action<BackgroundWorker>[] jobs = newjobs;
         public static void Worker()
         {
@@ -104,7 +104,11 @@ namespace PRFCreator
             }
 
             byte[] UUID = PartitionInfo.ReadSinUUID(Path.Combine(Utility.GetTempPath(), "system.sin"));
-            PartitionInfo.ScriptMode = (UUID != null) ? PartitionInfo.Mode.LegacyUUID : PartitionInfo.Mode.Legacy;
+            //PartitionInfo.ScriptMode = (UUID != null) ? PartitionInfo.Mode.LegacyUUID : PartitionInfo.Mode.Legacy;
+            if (!form.options_checklist.CheckedItems.Contains("Legacy mode"))
+                PartitionInfo.ScriptMode = PartitionInfo.Mode.Sinflash;
+            else
+                PartitionInfo.ScriptMode = (UUID != null) ? PartitionInfo.Mode.LegacyUUID : PartitionInfo.Mode.Legacy;
             Utility.ScriptSetUUID(worker, "system", UUID);
         }
 
@@ -154,8 +158,6 @@ namespace PRFCreator
             Logger.WriteLog("Adding system to zip");
             Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "system.sin"), "system.sin", true, Ionic.Zlib.CompressionLevel.None);
             File.Delete(Path.Combine(Utility.GetTempPath(), "system.sin"));
-
-            PartitionInfo.ScriptMode = PartitionInfo.Mode.Sinflash;
         }
 
         private static void AddParititonImage(BackgroundWorker worker)
