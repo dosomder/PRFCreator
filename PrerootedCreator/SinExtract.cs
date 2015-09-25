@@ -73,9 +73,6 @@ namespace PRFCreator
                 long finallength = SinFile.GetFinalLength(fsw);
                 if (finallength > previousDest + previousLength)
                     FillFF(fsw, (previousDest + previousLength), (finallength - previousDest - previousLength));
-                else if (finallength != 0)
-                    //new sinv3 with compression adds some stuff after ext4 image
-                    fsw.SetLength(finallength);
 
                 if (showProgress)
                     sender.ReportProgress(100);
