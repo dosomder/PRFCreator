@@ -99,10 +99,10 @@ namespace PRFCreator
                 }
             }
 
-            Utility.WriteResourceToFile("PRFCreator.Resources.flashable.zip", Settings.destinationFile);
+            Utility.WriteResourceToFile("PRFCreator.Resources.flashable-prerooted.zip", Settings.destinationFile);
             if (!System.IO.File.Exists(Settings.destinationFile))
             {
-                Logger.WriteLog("Error: Unable to extract flashable.zip from the exe");
+                Logger.WriteLog("Error: Unable to extract flashable-prerooted.zip from the exe");
                 return;
             }
 

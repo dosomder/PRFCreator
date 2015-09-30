@@ -237,7 +237,7 @@ namespace PRFCreator
             Utility.WriteResourceToFile("PRFCreator.Resources.testkey.x509.pem", "testkey.x509.pem");
 
             Logger.WriteLog("Signing zip file");
-            if (Utility.RunProcess("java", "-Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 flashable.zip flashable-prerooted-signed.zip") == 0)
+            if (Utility.RunProcess("java", "-Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 flashable-prerooted.zip flashable-prerooted-signed.zip") == 0)
                 File.Delete(Settings.destinationFile);
             else
                 Logger.WriteLog("Error: Could not sign zip");
@@ -248,10 +248,6 @@ namespace PRFCreator
 
         private static void Complete(BackgroundWorker worker)
         {
-            File.Delete("flashable-prerooted.zip");
-            if (File.Exists(Settings.destinationFile) && Settings.destinationFile == "flashable.zip")
-                File.Move(Settings.destinationFile, "flashable-prerooted.zip");
-
             Logger.WriteLog("Finished\n");
         }
 

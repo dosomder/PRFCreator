@@ -133,7 +133,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Resources\flashable.zip" />
+    <EmbeddedResource Include="Resources\flashable-prerooted.zip" />
     <EmbeddedResource Include="Resources\testkey.pk8" />
     <EmbeddedResource Include="Resources\testkey.x509.pem" />
   </ItemGroup>
@@ -160,11 +160,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent Condition=" '$(OS)' != 'Unix' ">del "$(ProjectDir)Resources\flashable.zip"
-"$(SolutionDir)compile-tools\7z.exe" a -r  "$(ProjectDir)Resources\flashable.zip" "$(SolutionDir)flashable.zip-files\*" -mx7</PreBuildEvent>
-    <PreBuildEvent Condition=" '$(OS)' == 'Unix' ">rm "$(ProjectDir)Resources\flashable.zip"
+    <PreBuildEvent Condition=" '$(OS)' != 'Unix' ">del "$(ProjectDir)Resources\flashable-prerooted.zip"
+"$(SolutionDir)compile-tools\7z.exe" a -r  "$(ProjectDir)Resources\flashable-prerooted.zip" "$(SolutionDir)flashable.zip-files\*" -mx7</PreBuildEvent>
+    <PreBuildEvent Condition=" '$(OS)' == 'Unix' ">rm "$(ProjectDir)Resources\flashable-prerooted.zip"
 cd "$(SolutionDir)flashable.zip-files\"
-zip -r -7 "$(ProjectDir)Resources\flashable.zip" .</PreBuildEvent>
+zip -r -7 "$(ProjectDir)Resources\flashable-prerooted.zip" .</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent Condition=" '$(OS)' != 'Unix' ">move $(TargetDir)Resources\signapk.jar $(TargetDir)

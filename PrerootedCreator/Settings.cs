@@ -11,7 +11,7 @@ namespace PRFCreator
         private const string SettingFile = "PRFCreator.xml";
         public static string templocation = null;
         public static bool saveDialog = false;
-        public static string destinationFile = "flashable.zip";
+        public static string destinationFile = "flashable-prerooted.zip";
 
         public static void ReadSettings()
         {
