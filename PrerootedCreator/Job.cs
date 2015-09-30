@@ -156,7 +156,7 @@ namespace PRFCreator
         {
             SetJobNum(++JobNum);
             Logger.WriteLog("Adding system to zip");
-            Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "system.sin"), "system.sin", true, Ionic.Zlib.CompressionLevel.None);
+            Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "system.sin"), "system.sin", true);
             File.Delete(Path.Combine(Utility.GetTempPath(), "system.sin"));
         }
 
