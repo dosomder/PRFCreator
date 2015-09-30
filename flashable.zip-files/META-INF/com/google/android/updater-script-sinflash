@@ -20,7 +20,7 @@ package_extract_file("partition-image.sin", "/tmp/partition-image.sin");
 set_perm(0, 0, 0755, "/tmp/busybox");
 set_perm(0, 0, 0755, "/tmp/sinflash");
 set_perm(0, 0, 0755, "/tmp/flash_apps.sh");
-mount("/data");
+run_program("/tmp/busybox", "mount", "/data");
 set_progress(0.050000);
 ui_print("PRF is using sinflash");
 
@@ -121,11 +121,11 @@ endif;
 
 
 ui_print(" ");
-mount("/data");
+run_program("/tmp/busybox", "mount", "/data");
 run_program("/tmp/busybox", "blockdev", "--setrw", "/dev/block/platform/msm_sdcc.1/by-name/system");
 run_program("/tmp/busybox", "mount", "/system");
 if
-	run_program("/tmp/flash_apps.sh", file_getprop("/tmp/prfargs", "zip")) == "0"
+	run_program("/tmp/flash_apps.sh", file_getprop("/tmp/prfargs", "zip"), "/tmp") == "0"
 then
 	ui_print("Apps installed to /data and/or /system");
 endif;

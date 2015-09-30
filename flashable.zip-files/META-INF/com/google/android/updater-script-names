@@ -18,8 +18,7 @@ package_extract_file("utils/flash_apps.sh", "/tmp/flash_apps.sh");
 set_perm(0, 0, 0755, "/tmp/busybox");
 set_perm(0, 0, 0755, "/tmp/flash_apps.sh");
 set_progress(0.050000);
-mount("/sdcard");
-run_program("/tmp/busybox", "mkdir", "/sdcard/prfc");
+run_program("/tmp/busybox", "mount", "/data");
 ui_print("PRF is using partition names");
 
 # ===================== System =====================
@@ -84,7 +83,7 @@ set_progress(0.700000);
 
 # ===================== Modem =====================
 if
-	package_extract_file("amss_fsg", "/sdcard/prfc/amss_fsg") == "t"
+	package_extract_file("amss_fsg", "/tmp/amss_fsg") == "t"
 then
 	if
 		run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-name/fsg") != "0"
@@ -92,23 +91,23 @@ then
 		abort("Error: fsg partition does not exist");
 	endif;
 	#fsg partition is bigger than fsg file but it's just 0x00 at the end, that's why we have to use dd with conv=notrunc
-	run_program("/tmp/busybox", "dd", "if=/sdcard/prfc/amss_fsg", "of=/dev/block/platform/msm_sdcc.1/by-name/fsg", "conv=notrunc");
+	run_program("/tmp/busybox", "dd", "if=/tmp/amss_fsg", "of=/dev/block/platform/msm_sdcc.1/by-name/fsg", "conv=notrunc");
 
 	#not sure if these are required as content seem to change after every reboot
 	#+ fs_* files seem to be 1024bytes 0x00
 	#flashtool fully wipes modemst* partitions
 	#OTA updates simply use package_extract_file and write 1024bytes
 	if
-		package_extract_file("amss_fs_1", "/sdcard/prfc/amss_fs_1") == "t"
+		package_extract_file("amss_fs_1", "/tmp/amss_fs_1") == "t"
 	then
 		assert(run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-name/modemst1") == "0");
-		run_program("/tmp/busybox", "dd", "if=/sdcard/prfc/amss_fs_1", "of=/dev/block/platform/msm_sdcc.1/by-name/modemst1", "conv=notrunc");
+		run_program("/tmp/busybox", "dd", "if=/tmp/amss_fs_1", "of=/dev/block/platform/msm_sdcc.1/by-name/modemst1", "conv=notrunc");
 	endif;
 	if
-		package_extract_file("amss_fs_2", "/sdcard/prfc/amss_fs_2") == "t"
+		package_extract_file("amss_fs_2", "/tmp/amss_fs_2") == "t"
 	then
 		assert(run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-name/modemst2") == "0");
-		run_program("/tmp/busybox", "dd", "if=/sdcard/prfc/amss_fs_2", "of=/dev/block/platform/msm_sdcc.1/by-name/modemst2", "conv=notrunc");
+		run_program("/tmp/busybox", "dd", "if=/tmp/amss_fs_2", "of=/dev/block/platform/msm_sdcc.1/by-name/modemst2", "conv=notrunc");
 	endif;
 	ui_print("Modem flashed.");
 endif;
@@ -116,7 +115,6 @@ endif;
 # ===================== Clean up =====================
 set_progress(0.900000);
 ui_print("Cleaning up...");
-delete_recursive("/sdcard/prfc");
 
 set_progress(1.000000);
 ui_print("Finished!");
@@ -152,7 +150,7 @@ endif;
 
 
 ui_print(" ");
-mount("/data");
+run_program("/tmp/busybox", "mount", "/data");
 run_program("/tmp/busybox", "blockdev", "--setrw", "/dev/block/platform/msm_sdcc.1/by-name/system");
 run_program("/tmp/busybox", "mount", "/system");
 if

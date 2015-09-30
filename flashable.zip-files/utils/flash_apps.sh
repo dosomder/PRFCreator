@@ -1,5 +1,10 @@
 #!/sbin/sh
 
+if [ -n "$2" ];
+then
+	cd "$2"
+fi
+
 zip="$1"
 if [ ! -f "$zip" ];
 then
