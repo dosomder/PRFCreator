@@ -248,7 +248,8 @@ namespace PRFCreator
 
         private static void Complete(BackgroundWorker worker)
         {
-            if (File.Exists(Settings.destinationFile) && !File.Exists("flashable-prerooted.zip") && Settings.destinationFile == "flashable.zip")
+            File.Delete("flashable-prerooted.zip");
+            if (File.Exists(Settings.destinationFile) && Settings.destinationFile == "flashable.zip")
                 File.Move(Settings.destinationFile, "flashable-prerooted.zip");
 
             Logger.WriteLog("Finished\n");
