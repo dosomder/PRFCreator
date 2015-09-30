@@ -18,11 +18,11 @@ package_extract_file("utils/flash_apps.sh", "/tmp/flash_apps.sh");
 set_perm(0, 0, 0755, "/tmp/busybox");
 set_perm(0, 0, 0755, "/tmp/flash_apps.sh");
 set_progress(0.050000);
-run_program("/tmp/busybox", "mount", "/data");
 ui_print("PRF is using partition names");
 
 # ===================== System =====================
 ui_print("Installing firmware. This might take a while...");
+run_program("/tmp/busybox", "umount", "/system");
 set_progress(0.150000);
 if
 	run_program("/tmp/busybox", "ls", "/dev/block/platform/msm_sdcc.1/by-name/system") == "0"
@@ -121,6 +121,7 @@ ui_print("Finished!");
 ui_print("Launching SuperSU and Recovery zip");
 ui_print(" ");
 
+run_program("/tmp/busybox", "umount", "/system");
 run_program("/tmp/busybox", "blockdev", "--setrw", "/dev/block/platform/msm_sdcc.1/by-name/system");
 run_program("/tmp/busybox", "mount", "/system");
 
