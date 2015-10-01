@@ -236,9 +236,13 @@ namespace PRFCreator
             Utility.WriteResourceToFile("PRFCreator.Resources.testkey.pk8", "testkey.pk8");
             Utility.WriteResourceToFile("PRFCreator.Resources.testkey.x509.pem", "testkey.x509.pem");
 
+            string newdest = Path.GetFileNameWithoutExtension(Settings.destinationFile) + "-signed.zip";
             Logger.WriteLog("Signing zip file");
-            if (Utility.RunProcess("java", "-Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 " + Settings.destinationFile + " " + Path.GetFileNameWithoutExtension(Settings.destinationFile) + "-signed.zip") == 0)
+            if (Utility.RunProcess("java", "-Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 " + Settings.destinationFile + " " + newdest) == 0)
+            {
                 File.Delete(Settings.destinationFile);
+                Settings.destinationFile = newdest;
+            }
             else
                 Logger.WriteLog("Error: Could not sign zip");
 
