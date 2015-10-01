@@ -48,7 +48,9 @@
             this.include_label = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.include_checklist = new PRFCreator.CustomCheckedListBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.options_checklist = new PRFCreator.CustomCheckedListBox();
             this.add_extra_button = new System.Windows.Forms.Button();
             this.remove_extra_button = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -56,8 +58,6 @@
             this.extra_dataGridView = new System.Windows.Forms.DataGridView();
             this.GridViewName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridViewType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.include_checklist = new PRFCreator.CustomCheckedListBox();
-            this.options_checklist = new PRFCreator.CustomCheckedListBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -247,6 +247,25 @@
             this.groupBox2.TabIndex = 21;
             this.groupBox2.TabStop = false;
             // 
+            // include_checklist
+            // 
+            this.include_checklist.AccessibleDescription = "";
+            this.include_checklist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.include_checklist.BackColor = System.Drawing.SystemColors.Menu;
+            this.include_checklist.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.include_checklist.CheckOnClick = true;
+            this.include_checklist.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.include_checklist.FormattingEnabled = true;
+            this.include_checklist.Items.AddRange(new object[] {
+            "Kernel",
+            "FOTAKernel",
+            "Modem",
+            "LTALabel"});
+            this.include_checklist.Location = new System.Drawing.Point(5, 33);
+            this.include_checklist.Name = "include_checklist";
+            this.include_checklist.Size = new System.Drawing.Size(92, 64);
+            this.include_checklist.TabIndex = 17;
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.options_checklist);
@@ -255,6 +274,21 @@
             this.groupBox3.Size = new System.Drawing.Size(108, 51);
             this.groupBox3.TabIndex = 23;
             this.groupBox3.TabStop = false;
+            // 
+            // options_checklist
+            // 
+            this.options_checklist.BackColor = System.Drawing.SystemColors.Menu;
+            this.options_checklist.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.options_checklist.CheckOnClick = true;
+            this.options_checklist.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.options_checklist.FormattingEnabled = true;
+            this.options_checklist.Items.AddRange(new object[] {
+            "Sign zip",
+            "Legacy mode"});
+            this.options_checklist.Location = new System.Drawing.Point(6, 12);
+            this.options_checklist.Name = "options_checklist";
+            this.options_checklist.Size = new System.Drawing.Size(96, 32);
+            this.options_checklist.TabIndex = 22;
             // 
             // add_extra_button
             // 
@@ -300,7 +334,6 @@
             // extra_dataGridView
             // 
             this.extra_dataGridView.AllowUserToAddRows = false;
-            this.extra_dataGridView.AllowUserToDeleteRows = false;
             this.extra_dataGridView.AllowUserToResizeColumns = false;
             this.extra_dataGridView.AllowUserToResizeRows = false;
             this.extra_dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -337,40 +370,6 @@
             this.GridViewType.Name = "GridViewType";
             this.GridViewType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.GridViewType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // include_checklist
-            // 
-            this.include_checklist.AccessibleDescription = "";
-            this.include_checklist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.include_checklist.BackColor = System.Drawing.SystemColors.Menu;
-            this.include_checklist.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.include_checklist.CheckOnClick = true;
-            this.include_checklist.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.include_checklist.FormattingEnabled = true;
-            this.include_checklist.Items.AddRange(new object[] {
-            "Kernel",
-            "FOTAKernel",
-            "Modem",
-            "LTALabel"});
-            this.include_checklist.Location = new System.Drawing.Point(5, 33);
-            this.include_checklist.Name = "include_checklist";
-            this.include_checklist.Size = new System.Drawing.Size(92, 64);
-            this.include_checklist.TabIndex = 17;
-            // 
-            // options_checklist
-            // 
-            this.options_checklist.BackColor = System.Drawing.SystemColors.Menu;
-            this.options_checklist.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.options_checklist.CheckOnClick = true;
-            this.options_checklist.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.options_checklist.FormattingEnabled = true;
-            this.options_checklist.Items.AddRange(new object[] {
-            "Sign zip",
-            "Legacy mode"});
-            this.options_checklist.Location = new System.Drawing.Point(6, 12);
-            this.options_checklist.Name = "options_checklist";
-            this.options_checklist.Size = new System.Drawing.Size(96, 32);
-            this.options_checklist.TabIndex = 22;
             // 
             // Form1
             // 
