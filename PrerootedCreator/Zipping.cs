@@ -134,7 +134,6 @@ namespace PRFCreator
             using (ZipFile zip = new ZipFile(zipfile))
             {
                 Utility.SetZipTempFolder(zip);
-                //intended as an optimization for sinflash to use STORED
                 zip.CompressionLevel = complevel;
 
                 if (exists)
