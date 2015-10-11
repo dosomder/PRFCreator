@@ -98,6 +98,8 @@ namespace PRFCreator
                     Settings.destinationFile = sfd.FileName;
                 }
             }
+            else
+                Settings.destinationFile = "flashable-prerooted.zip";
 
             Utility.WriteResourceToFile("PRFCreator.Resources.flashable-prerooted.zip", Settings.destinationFile);
             if (!System.IO.File.Exists(Settings.destinationFile))
