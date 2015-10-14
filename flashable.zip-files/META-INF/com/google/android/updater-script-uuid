@@ -150,7 +150,7 @@ endif;
 
 
 ui_print(" ");
-mount("/data");
+run_program("/tmp/busybox", "mount", "/data");
 run_program("/tmp/busybox", "blockdev", "--setrw", "/dev/block/platform/msm_sdcc.1/by-name/system");
 run_program("/tmp/busybox", "mount", "/system");
 if
