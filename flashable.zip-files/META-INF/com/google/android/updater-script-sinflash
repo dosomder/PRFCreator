@@ -143,6 +143,9 @@ endif;
 
 
 ui_print(" ");
+#Extract busybox again since a flashable zip could have overwritten it
+package_extract_file("utils/busybox", "/tmp/busybox");
+set_perm(0, 0, 0755, "/tmp/busybox");
 run_program("/tmp/busybox", "mount", "/data");
 run_program("/tmp/busybox", "blockdev", "--setrw", "/dev/block/platform/msm_sdcc.1/by-name/system");
 run_program("/tmp/busybox", "mount", "/system");
