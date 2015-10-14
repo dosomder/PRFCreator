@@ -82,6 +82,8 @@ namespace PRFCreator
                 ExtractAndAdd(worker, GetKernelFilename(ftffile), ".elf", ftffile, "boot");
                 ExtractAndAdd(worker, "rpm", ".elf", ftffile);
             }
+
+            Utility.EditConfig(worker, "KERNEL", "1");
         }
 
         private static void AddFOTAKernel(BackgroundWorker worker, string ftffile)
@@ -90,6 +92,8 @@ namespace PRFCreator
                 ExtractAndAddSin(worker, "fotakernel", ftffile);
             else
                 ExtractAndAdd(worker, "fotakernel", ".elf", ftffile);
+
+            Utility.EditConfig(worker, "FOTAKERNEL", "1");
         }
 
         private static void AddLTALabel(BackgroundWorker worker, string ftffile)
@@ -105,6 +109,8 @@ namespace PRFCreator
                 ExtractAndAddSin(worker, Path.GetFileNameWithoutExtension(ltalname), ftffile, "ltalabel");
             else
                 ExtractAndAdd(worker, Path.GetFileNameWithoutExtension(ltalname), ".ext4", ftffile, "ltalabel");
+
+            Utility.EditConfig(worker, "LTALABEL", "1");
         }
 
         private static string GetModemFilename(string ftffile)
@@ -133,6 +139,8 @@ namespace PRFCreator
                 ExtractAndAdd(worker, "amss_fs_1", string.Empty, ftffile);
                 ExtractAndAdd(worker, "amss_fs_2", string.Empty, ftffile);
             }
+
+            Utility.EditConfig(worker, "MODEM", "1");
         }
 
         private static void ExtractAndAdd(BackgroundWorker worker, string name, string extension, string ftffile, string AsFilename = "")

@@ -17,6 +17,7 @@ package_extract_file("utils/busybox", "/tmp/busybox");
 package_extract_file("utils/sinflash", "/tmp/sinflash");
 package_extract_file("utils/flash_apps.sh", "/tmp/flash_apps.sh");
 package_extract_file("partition-image.sin", "/tmp/partition-image.sin");
+package_extract_file("prfconfig", "/tmp/prfconfig");
 set_perm(0, 0, 0755, "/tmp/busybox");
 set_perm(0, 0, 0755, "/tmp/sinflash");
 set_perm(0, 0, 0755, "/tmp/flash_apps.sh");
@@ -29,59 +30,79 @@ run_program("/tmp/busybox", "umount", "/system");
 set_progress(0.150000);
 
 if
-	run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "system.sin", "/tmp/partition-image.sin") != "0"
+	file_getprop("/tmp/prfconfig", "SYSTEM") == "1"
 then
-	abort("Error flashing system.sin");
-else
-	ui_print("System flashed.");
+	if
+		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "system.sin", "/tmp/partition-image.sin") != "0"
+	then
+		abort("Error flashing system.sin");
+	else
+		ui_print("System flashed.");
+	endif;
 endif;
 set_progress(0.550000);
 
 # ===================== LTALabel =====================
 if
-	run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "ltalabel.sin", "/tmp/partition-image.sin") == "1"
+	file_getprop("/tmp/prfconfig", "LTALABEL") == "1"
 then
-	abort("Error flashing ltalabel.sin");
-else
-	ui_print("LTALabel flashed.");
+	if
+		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "ltalabel.sin", "/tmp/partition-image.sin") != "0"
+	then
+		ui_print("Error flashing ltalabel.sin");
+	else
+		ui_print("LTALabel flashed.");
+	endif;
 endif;
 set_progress(0.600000);
 
 # ===================== FOTAKernel =====================
 if
-	run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "fotakernel.sin", "/tmp/partition-image.sin") == "1"
+	file_getprop("/tmp/prfconfig", "FOTAKERNEL") == "1"
 then
-	abort("Error flashing fotakernel.sin");
-else
-	ui_print("FOTAKernel flashed.");
+	if
+		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "fotakernel.sin", "/tmp/partition-image.sin") != "0"
+	then
+		ui_print("Error flashing fotakernel.sin");
+	else
+		ui_print("FOTAKernel flashed.");
+	endif;
 endif;
 set_progress(0.650000);
 
 # ===================== Kernel & rpm =====================
 if
-	run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "boot.sin", "/tmp/partition-image.sin") == "1"
+	file_getprop("/tmp/prfconfig", "KERNEL") == "1"
 then
-	abort("Error flashing kernel.sin");
-else
 	if
-		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "rpm.sin", "/tmp/partition-image.sin") == "1"
+		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "boot.sin", "/tmp/partition-image.sin") != "0"
 	then
-		abort("Error flashing rpm.sin");
+		ui_print("Error flashing kernel.sin");
+	else
+		if
+			run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "rpm.sin", "/tmp/partition-image.sin") == "1"
+		then
+			ui_print("Error flashing rpm.sin");
+		endif;
+		ui_print("Kernel flashed.");
 	endif;
-	ui_print("Kernel flashed.");
 endif;
 set_progress(0.700000);
 
 # ===================== Modem =====================
 if
-	run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fsg.sin", "/tmp/partition-image.sin") == "1"
+	file_getprop("/tmp/prfconfig", "MODEM") == "1"
 then
-	abort("Error flashing modem");
-endif;
-ui_print("Modem flashed.");
+	if
+		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fsg.sin", "/tmp/partition-image.sin") == "1"
+	then
+		ui_print("Error flashing modem");
+	endif;
+	ui_print("Modem flashed.");
 
-run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fs_1.sin", "/tmp/partition-image.sin");
-run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fs_2.sin", "/tmp/partition-image.sin");
+	run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fs_1.sin", "/tmp/partition-image.sin");
+	run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fs_2.sin", "/tmp/partition-image.sin");
+endif;
 
 # ===================== Clean up =====================
 set_progress(0.900000);

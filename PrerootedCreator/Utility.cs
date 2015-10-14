@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace PRFCreator
 {
@@ -101,6 +102,21 @@ namespace PRFCreator
             File.WriteAllText(Path.Combine(Utility.GetTempPath(), "updater-script"), content, Encoding.ASCII);
             Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "updater-script"), "META-INF/com/google/android/updater-script", false);
             File.Delete(Path.Combine(Utility.GetTempPath(), "updater-script"));
+        }
+
+        public static void EditConfig(BackgroundWorker worker, string key, string value)
+        {
+            Zipping.UnzipFile(worker, Settings.destinationFile, "prfconfig", string.Empty, Utility.GetTempPath(), false);
+            string content = File.ReadAllText(Path.Combine(Utility.GetTempPath(), "prfconfig"), Encoding.ASCII);
+
+            if (!content.Contains(key + "="))
+                content += "\n" + key + "=" + value;
+            else
+                content = Regex.Replace(content, "^" + key + "=.*$", key + "=" + value, RegexOptions.Multiline);
+
+            File.WriteAllText(Path.Combine(Utility.GetTempPath(), "prfconfig"), content, Encoding.ASCII);
+            Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "prfconfig"), "prfconfig", false);
+            File.Delete(Path.Combine(Utility.GetTempPath(), "prfconfig"));
         }
 
         //http://stackoverflow.com/questions/2989400/store-files-in-c-sharp-exe-file
