@@ -28,7 +28,7 @@ echo $data_apps
 
 if [ -n "$data_apps" ];
 then
-	./busybox unzip "$zip" "$data_apps" -d /
+	./busybox unzip "$zip" $data_apps -d /
 	cd /
 	chmod 644 $data_apps
 	chown system:system $data_apps
@@ -45,7 +45,7 @@ echo $system_apps
 
 if [ -n "$system_apps" ];
 then
-	./busybox unzip "$zip" "$system_apps" -d /
+	./busybox unzip "$zip" $system_apps -d /
 	cd /
 	chmod 644 $system_apps
 	chown root:root $system_apps
