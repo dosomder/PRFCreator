@@ -119,6 +119,22 @@ namespace PRFCreator
             File.Delete(Path.Combine(Utility.GetTempPath(), "prfconfig"));
         }
 
+        public static string ManifestGetName(byte[] manifest)
+        {
+            byte[] m = Encoding.Unicode.GetBytes("manifest\0");
+            for (int i = 0; i < manifest.Length; i++)
+            {
+                if (manifest.Length - i < m.Length)
+                    return null;
+                if (!byteArrayCompare(manifest, m, m.Length, i))
+                    continue;
+                short namelen = BitConverter.ToInt16(manifest, m.Length + i);
+                return Encoding.Unicode.GetString(manifest, m.Length + i + 2, namelen * 2);
+            }
+
+            return null;
+        }
+
         //http://stackoverflow.com/questions/2989400/store-files-in-c-sharp-exe-file
         public static void WriteResourceToFile(string resourceName, string fileName)
         {
@@ -163,14 +179,16 @@ namespace PRFCreator
             return BitConverter.ToInt64(baLong, 0);
         }
 
-        public static bool byteArrayCompare(byte[] arr1, byte[] arr2)
+        public static bool byteArrayCompare(byte[] arr1, byte[] arr2, int len = 0, int arr1_index = 0)
         {
-            if (arr1.Length != arr2.Length)
+            if (len == 0 && arr1.Length != arr2.Length)
                 return false;
+            if (len == 0)
+                len = arr1.Length;
 
-            for (int i = 0; i < arr1.Length; i++)
+            for (int i = 0; i < len; i++)
             {
-                if (arr1[i] != arr2[i])
+                if (arr1[arr1_index + i] != arr2[i])
                     return false;
             }
 

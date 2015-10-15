@@ -30,10 +30,23 @@ namespace PRFCreator
         public static void AddAPKFile(BackgroundWorker worker, string filename, string type)
         {
             Logger.WriteLog("Adding APK: " + Path.GetFileName(filename));
+            if (!Zipping.UnzipFile(worker, filename, "AndroidManifest.xml", string.Empty, Utility.GetTempPath(), false))
+            {
+                Logger.WriteLog("Error adding APK: AndroidManifest.xml not found");
+                return;
+            }
+            string appname = Utility.ManifestGetName(File.ReadAllBytes(Path.Combine(Utility.GetTempPath(), "AndroidManifest.xml")));
+            File.Delete(Path.Combine(Utility.GetTempPath(), "AndroidManifest.xml"));
+            if (appname == null)
+            {
+                Logger.WriteLog("Error adding APK: Could not read appname from AndroidManifest.xml");
+                return;
+            }
+
             if (type == "App (System)")
-                Zipping.AddToZip(worker, Settings.destinationFile, filename, "system/app/" + Path.GetFileName(filename), false);
+                Zipping.AddToZip(worker, Settings.destinationFile, filename, "system/app/" + appname + Path.GetExtension(filename), false);
             else
-                Zipping.AddToZip(worker, Settings.destinationFile, filename, "data/app/" + Path.GetFileName(filename), false);
+                Zipping.AddToZip(worker, Settings.destinationFile, filename, "data/app/" + appname + Path.GetExtension(filename), false);
         }
 
         public static void AddExtraFlashable(BackgroundWorker worker, string filename)

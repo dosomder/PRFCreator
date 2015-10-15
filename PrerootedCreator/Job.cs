@@ -189,6 +189,12 @@ namespace PRFCreator
             {
                 string type = form.extra_dataGridView["GridViewType", i].Value.ToString();
                 string name = form.extra_dataGridView["GridViewName", i].Value.ToString();
+                if (!File.Exists(name))
+                {
+                    Logger.WriteLog("Error adding Extra File '" + name + "': File does not exist");
+                    continue;
+                }
+
                 if (type == "Flashable zip")
                     ExtraFiles.AddExtraFlashable(worker, name);
                 else
