@@ -32,10 +32,11 @@ namespace PRFCreator
         {
             try
             {
-                if (!File.Exists(SettingFile))
+                string SettingFileAbs = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), SettingFile);
+                if (!File.Exists(SettingFileAbs))
                     GenerateSettings();
 
-                XDocument xdoc = XDocument.Load(SettingFile);
+                XDocument xdoc = XDocument.Load(SettingFileAbs);
                 return xdoc.Element("PRFCreator").Element(element).Value;
             }
             catch (Exception e)
@@ -47,20 +48,22 @@ namespace PRFCreator
 
         public static void SetSetting(string element, string value)
         {
-            if (!File.Exists(SettingFile))
+            string SettingFileAbs = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), SettingFile);
+            if (!File.Exists(SettingFileAbs))
                 GenerateSettings();
-            XDocument xdoc = XDocument.Load(SettingFile);
+            XDocument xdoc = XDocument.Load(SettingFileAbs);
             XElement xe = xdoc.Element("PRFCreator").Element(element);
             if (xe == null)
                 xdoc.Element("PRFCreator").Add(new XElement(element, value));
             else
                 xe.Value = value;
 
-            xdoc.Save(SettingFile);
+            xdoc.Save(SettingFileAbs);
         }
 
         private static void GenerateSettings()
         {
+            string SettingFileAbs = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), SettingFile);
             string preset = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" +
 @"<PRFCreator>
     <!-- folder to use as a temp file location, empty to use %tmp% -->
@@ -69,7 +72,7 @@ namespace PRFCreator
     <!-- display a dialog to let the user choose the destination file and path -->
     <saveDialog>False</saveDialog>
 </PRFCreator>";
-            File.WriteAllText(SettingFile, preset);
+            File.WriteAllText(SettingFileAbs, preset);
         }
     }
 }
