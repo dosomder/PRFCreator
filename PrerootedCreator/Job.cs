@@ -233,7 +233,9 @@ namespace PRFCreator
                 Logger.WriteLog("Error: Could not execute Java. Is it installed?");
                 return;
             }
-            if (!File.Exists("signapk.jar"))
+
+            string signapkAbs = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "signapk.jar");
+            if (!File.Exists(signapkAbs))
             {
                 Logger.WriteLog("Error: signapk.jar file not found");
                 return;
@@ -244,7 +246,7 @@ namespace PRFCreator
 
             string newdest = Path.GetFileNameWithoutExtension(Settings.destinationFile) + "-signed.zip";
             Logger.WriteLog("Signing zip file");
-            if (Utility.RunProcess("java", "-Xmx1024m -jar signapk.jar -w testkey.x509.pem testkey.pk8 " + Settings.destinationFile + " " + newdest) == 0)
+            if (Utility.RunProcess("java", "-Xmx1024m -jar " + signapkAbs + " -w testkey.x509.pem testkey.pk8 " + Settings.destinationFile + " " + newdest) == 0)
             {
                 File.Delete(Settings.destinationFile);
                 Settings.destinationFile = newdest;
