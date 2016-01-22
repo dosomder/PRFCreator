@@ -120,6 +120,8 @@ namespace PRFCreator
             {
                 if (Zipping.UnzipFile(worker, form.ftf_textbox.Text, "partition.sin", string.Empty, Utility.GetTempPath()))
                     File.Move(Path.Combine(Utility.GetTempPath(), "partition.sin"), Path.Combine(Utility.GetTempPath(), "partition-image.sin"));
+                else if (Zipping.UnzipFile(worker, form.ftf_textbox.Text, "partitions.sin", string.Empty, Utility.GetTempPath()))
+                    File.Move(Path.Combine(Utility.GetTempPath(), "partitions.sin"), Path.Combine(Utility.GetTempPath(), "partition-image.sin"));
                 else
                 {
                     Logger.WriteLog("Error extracting partition-image.sin from ftf. Please try Legacy Mode");
