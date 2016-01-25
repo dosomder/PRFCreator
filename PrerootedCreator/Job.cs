@@ -36,7 +36,7 @@ namespace PRFCreator
         }
 
         private static Action<BackgroundWorker>[] legacyjobs = { UnpackSystem, UnpackSystemEXT4, EditScript, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, AddSystemEXT4, SignZip, Complete };
-        private static Action<BackgroundWorker>[] newjobs = { UnpackSystem, EditScript, UnpackPartitionImage, AddParititonImage, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, AddSystem, SignZip, Complete };
+        private static Action<BackgroundWorker>[] newjobs = { UnpackSystem, EditScript, AddExtras, AddSuperSU, AddRecovery, AddExtraFlashable, AddSystem, SignZip, Complete };
         private static Action<BackgroundWorker>[] jobs = newjobs;
         public static void Worker()
         {
@@ -112,25 +112,6 @@ namespace PRFCreator
             Utility.ScriptSetUUID(worker, "system", UUID);
         }
 
-        private static void UnpackPartitionImage(BackgroundWorker worker)
-        {
-            SetJobNum(++JobNum);
-            Logger.WriteLog("Extracting partition-image.sin from " + System.IO.Path.GetFileName(form.ftf_textbox.Text));
-            if (!Zipping.UnzipFile(worker, form.ftf_textbox.Text, "partition-image.sin", string.Empty, Utility.GetTempPath()))
-            {
-                if (Zipping.UnzipFile(worker, form.ftf_textbox.Text, "partition.sin", string.Empty, Utility.GetTempPath()))
-                    File.Move(Path.Combine(Utility.GetTempPath(), "partition.sin"), Path.Combine(Utility.GetTempPath(), "partition-image.sin"));
-                else if (Zipping.UnzipFile(worker, form.ftf_textbox.Text, "partitions.sin", string.Empty, Utility.GetTempPath()))
-                    File.Move(Path.Combine(Utility.GetTempPath(), "partitions.sin"), Path.Combine(Utility.GetTempPath(), "partition-image.sin"));
-                else
-                {
-                    Logger.WriteLog("Error extracting partition-image.sin from ftf. Please try Legacy Mode");
-                    worker.CancelAsync();
-                    return;
-                }
-            }
-        }
-
         private static void EditScript(BackgroundWorker worker)
         {
             SetJobNum(++JobNum);
@@ -160,14 +141,6 @@ namespace PRFCreator
             Logger.WriteLog("Adding system to zip");
             Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "system.sin"), "system.sin", true);
             File.Delete(Path.Combine(Utility.GetTempPath(), "system.sin"));
-        }
-
-        private static void AddParititonImage(BackgroundWorker worker)
-        {
-            SetJobNum(++JobNum);
-            Logger.WriteLog("Adding partition-image to zip");
-            Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), "partition-image.sin"), "partition-image.sin");
-            File.Delete(Path.Combine(Utility.GetTempPath(), "partition-image.sin"));
         }
 
         private static void AddExtras(BackgroundWorker worker)
