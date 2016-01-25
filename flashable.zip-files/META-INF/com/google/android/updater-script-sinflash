@@ -16,7 +16,6 @@ ui_print("Extracting files...");
 package_extract_file("utils/busybox", "/tmp/busybox");
 package_extract_file("utils/sinflash", "/tmp/sinflash");
 package_extract_file("utils/flash_apps.sh", "/tmp/flash_apps.sh");
-package_extract_file("partition-image.sin", "/tmp/partition-image.sin");
 package_extract_file("prfconfig", "/tmp/prfconfig");
 set_perm(0, 0, 0755, "/tmp/busybox");
 set_perm(0, 0, 0755, "/tmp/sinflash");
@@ -33,7 +32,7 @@ if
 	file_getprop("/tmp/prfconfig", "SYSTEM") == "1"
 then
 	if
-		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "system.sin", "/tmp/partition-image.sin") != "0"
+		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "system.sin", "-rfd", file_getprop("/tmp/prfargs", "outfile")) != "0"
 	then
 		abort("Error flashing system.sin");
 	else
@@ -47,7 +46,7 @@ if
 	file_getprop("/tmp/prfconfig", "LTALABEL") == "1"
 then
 	if
-		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "ltalabel.sin", "/tmp/partition-image.sin") != "0"
+		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "ltalabel.sin", "-rfd", file_getprop("/tmp/prfargs", "outfile")) != "0"
 	then
 		ui_print("Error flashing ltalabel.sin");
 	else
@@ -61,7 +60,7 @@ if
 	file_getprop("/tmp/prfconfig", "FOTAKERNEL") == "1"
 then
 	if
-		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "fotakernel.sin", "/tmp/partition-image.sin") != "0"
+		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "fotakernel.sin", "-rfd", file_getprop("/tmp/prfargs", "outfile")) != "0"
 	then
 		ui_print("Error flashing fotakernel.sin");
 	else
@@ -75,12 +74,12 @@ if
 	file_getprop("/tmp/prfconfig", "KERNEL") == "1"
 then
 	if
-		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "boot.sin", "/tmp/partition-image.sin") != "0"
+		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "boot.sin", "-rfd", file_getprop("/tmp/prfargs", "outfile")) != "0"
 	then
 		ui_print("Error flashing kernel.sin");
 	else
 		if
-			run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "rpm.sin", "/tmp/partition-image.sin") == "1"
+			run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "rpm.sin", "-rfd", file_getprop("/tmp/prfargs", "outfile")) == "1"
 		then
 			ui_print("Error flashing rpm.sin");
 		endif;
@@ -94,14 +93,14 @@ if
 	file_getprop("/tmp/prfconfig", "MODEM") == "1"
 then
 	if
-		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fsg.sin", "/tmp/partition-image.sin") == "1"
+		run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fsg.sin", "-rfd", file_getprop("/tmp/prfargs", "outfile")) == "1"
 	then
 		ui_print("Error flashing modem");
 	endif;
 	ui_print("Modem flashed.");
 
-	run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fs_1.sin", "/tmp/partition-image.sin");
-	run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fs_2.sin", "/tmp/partition-image.sin");
+	run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fs_1.sin");
+	run_program("/tmp/sinflash", "-z", file_getprop("/tmp/prfargs", "zip"), "amss_fs_2.sin");
 endif;
 
 # ===================== Clean up =====================
