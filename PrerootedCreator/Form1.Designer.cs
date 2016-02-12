@@ -194,7 +194,7 @@
             // 
             this.job_label.AutoSize = true;
             this.job_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.job_label.Location = new System.Drawing.Point(447, 409);
+            this.job_label.Location = new System.Drawing.Point(454, 409);
             this.job_label.Margin = new System.Windows.Forms.Padding(0);
             this.job_label.Name = "job_label";
             this.job_label.Size = new System.Drawing.Size(30, 15);
@@ -205,7 +205,7 @@
             // 
             this.jobnum_label.AutoSize = true;
             this.jobnum_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.jobnum_label.Location = new System.Drawing.Point(473, 409);
+            this.jobnum_label.Location = new System.Drawing.Point(480, 409);
             this.jobnum_label.Margin = new System.Windows.Forms.Padding(0);
             this.jobnum_label.Name = "jobnum_label";
             this.jobnum_label.Size = new System.Drawing.Size(0, 15);
