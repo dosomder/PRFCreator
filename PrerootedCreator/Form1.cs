@@ -20,7 +20,6 @@ namespace PRFCreator
         {
             version_label.Text = "v1.2";
             openFileDialog1.FileName = string.Empty;
-            openFileDialog1.Multiselect = false;
 
             Logger.form = Job.form = this;
             Settings.ReadSettings();
@@ -32,6 +31,7 @@ namespace PRFCreator
                 return;
 
             openFileDialog1.Filter = "FTF Files|*.ftf|All files|*";
+            openFileDialog1.Multiselect = false;
             DialogResult result = openFileDialog1.ShowDialog();
             if (result != DialogResult.OK)
                 return;
@@ -46,6 +46,7 @@ namespace PRFCreator
                 return;
 
             openFileDialog1.Filter = "Zip Files|*.zip|All files|*";
+            openFileDialog1.Multiselect = false;
             DialogResult result = openFileDialog1.ShowDialog();
             if (result != DialogResult.OK)
                 return;
@@ -178,6 +179,7 @@ namespace PRFCreator
                 return;
 
             openFileDialog1.Filter = "Zip Files|*.zip|All files|*";
+            openFileDialog1.Multiselect = false;
             DialogResult result = openFileDialog1.ShowDialog();
             if (result != DialogResult.OK)
                 return;
@@ -192,34 +194,38 @@ namespace PRFCreator
                 return;
 
             openFileDialog1.Filter = "ZIP / APK Files|*.zip;*.apk|All files|*";
+            openFileDialog1.Multiselect = true;
             DialogResult result = openFileDialog1.ShowDialog();
             if (result != DialogResult.OK)
                 return;
 
-            if (!dataGridViewContains(extra_dataGridView, "GridViewName", openFileDialog1.FileName))
+            foreach (string filename in openFileDialog1.FileNames)
             {
-                if (openFileDialog1.FileName.EndsWith(".zip"))
+                if (!dataGridViewContains(extra_dataGridView, "GridViewName", filename))
                 {
-                    int row = extra_dataGridView.Rows.Add();
-                    extra_dataGridView.Rows[row].Cells["GridViewName"].Value = openFileDialog1.FileName;
-                    DataGridViewComboBoxCell dgvcbc = (DataGridViewComboBoxCell)extra_dataGridView.Rows[row].Cells["GridViewType"];
-                    dgvcbc.Items.Add("Flashable zip");
-                    dgvcbc.Value = "Flashable zip";
+                    if (filename.EndsWith(".zip"))
+                    {
+                        int row = extra_dataGridView.Rows.Add();
+                        extra_dataGridView.Rows[row].Cells["GridViewName"].Value = filename;
+                        DataGridViewComboBoxCell dgvcbc = (DataGridViewComboBoxCell)extra_dataGridView.Rows[row].Cells["GridViewType"];
+                        dgvcbc.Items.Add("Flashable zip");
+                        dgvcbc.Value = "Flashable zip";
 
-                }
-                else if (openFileDialog1.FileName.EndsWith(".apk"))
-                {
-                    int row = extra_dataGridView.Rows.Add();
-                    extra_dataGridView.Rows[row].Cells["GridViewName"].Value = openFileDialog1.FileName;
-                    DataGridViewComboBoxCell dgvcbc = (DataGridViewComboBoxCell)extra_dataGridView.Rows[row].Cells["GridViewType"];
-                    dgvcbc.Items.Add("App (System)");
-                    dgvcbc.Items.Add("App (Data)");
-                    dgvcbc.Value = "App (Data)";
-                }
-                else
-                {
-                    Logger.WriteLog("Error adding extra file " + openFileDialog1.FileName + ": Unknown file type");
-                    return;
+                    }
+                    else if (filename.EndsWith(".apk"))
+                    {
+                        int row = extra_dataGridView.Rows.Add();
+                        extra_dataGridView.Rows[row].Cells["GridViewName"].Value = filename;
+                        DataGridViewComboBoxCell dgvcbc = (DataGridViewComboBoxCell)extra_dataGridView.Rows[row].Cells["GridViewType"];
+                        dgvcbc.Items.Add("App (System)");
+                        dgvcbc.Items.Add("App (Data)");
+                        dgvcbc.Value = "App (Data)";
+                    }
+                    else
+                    {
+                        Logger.WriteLog("Error adding extra file " + filename + ": Unknown file type");
+                        return;
+                    }
                 }
             }
 
