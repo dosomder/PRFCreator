@@ -115,46 +115,20 @@ namespace PRFCreator
         public void ControlsEnabled(bool Enabled)
         {
             isWorking = !Enabled;
-            if (ftf_textbox.InvokeRequired)
-                ftf_textbox.Invoke(new MethodInvoker(delegate { ftf_textbox.ReadOnly = !Enabled; }));
-            else
-                ftf_textbox.ReadOnly = !Enabled;
-            if (su_textbox.InvokeRequired)
-                su_textbox.Invoke(new MethodInvoker(delegate { su_textbox.ReadOnly = !Enabled; }));
-            else
-                su_textbox.ReadOnly = !Enabled;
-            if (rec_textbox.InvokeRequired)
-                rec_textbox.Invoke(new MethodInvoker(delegate { rec_textbox.ReadOnly = !Enabled; }));
-            else
-                rec_textbox.ReadOnly = !Enabled;
-            if(include_checklist.InvokeRequired)
-                include_checklist.Invoke(new MethodInvoker(delegate { include_checklist.Enabled = Enabled; }));
-            else
-                include_checklist.Enabled = Enabled;
-            if (create_button.InvokeRequired)
-                create_button.Invoke(new MethodInvoker(delegate { create_button.Enabled = Enabled; }));
-            else
-                create_button.Enabled = Enabled;
-            if (options_checklist.InvokeRequired)
-                options_checklist.Invoke(new MethodInvoker(delegate { options_checklist.Enabled = Enabled; }));
-            else
-                options_checklist.Enabled = Enabled;
-            if (add_extra_button.InvokeRequired)
-                add_extra_button.Invoke(new MethodInvoker(delegate { add_extra_button.Enabled = Enabled; }));
-            else
-                add_extra_button.Enabled = Enabled;
-            if (remove_extra_button.InvokeRequired)
-                remove_extra_button.Invoke(new MethodInvoker(delegate { remove_extra_button.Enabled = Enabled; }));
-            else
-                remove_extra_button.Enabled = Enabled;
+            Utility.InvokeIfNecessary(ftf_textbox, new MethodInvoker(delegate { ftf_textbox.ReadOnly = !Enabled; }));
+            Utility.InvokeIfNecessary(su_textbox, new MethodInvoker(delegate { su_textbox.ReadOnly = !Enabled; }));
+            Utility.InvokeIfNecessary(rec_textbox, new MethodInvoker(delegate { rec_textbox.ReadOnly = !Enabled; }));
+            Utility.InvokeIfNecessary(include_checklist, new MethodInvoker(delegate { include_checklist.Enabled = Enabled; }));
+            Utility.InvokeIfNecessary(create_button, new MethodInvoker(delegate { create_button.Enabled = Enabled; }));
+            Utility.InvokeIfNecessary(options_checklist, new MethodInvoker(delegate { options_checklist.Enabled = Enabled; }));
+            Utility.InvokeIfNecessary(add_extra_button, new MethodInvoker(delegate { add_extra_button.Enabled = Enabled; }));
+            Utility.InvokeIfNecessary(remove_extra_button, new MethodInvoker(delegate { remove_extra_button.Enabled = Enabled; }));
+            Utility.InvokeIfNecessary(extra_dataGridView, new MethodInvoker(delegate { extra_dataGridView.AllowUserToDeleteRows = Enabled; }));
 
-            if (extra_dataGridView.InvokeRequired)
-                extra_dataGridView.Invoke(new MethodInvoker(delegate { DataGridViewEnabled(extra_dataGridView, "GridViewType", Enabled); }));
-            else
-                DataGridViewEnabled(extra_dataGridView, "GridViewType", Enabled);
+            Utility.InvokeIfNecessary(extra_dataGridView, new MethodInvoker(delegate { dataGridViewEnabled(extra_dataGridView, "GridViewType", Enabled); }));
         }
 
-        private void DataGridViewEnabled(DataGridView dgr, string ColumnName, bool Enabled)
+        private void dataGridViewEnabled(DataGridView dgr, string ColumnName, bool Enabled)
         {
             for (int i = 0; i < dgr.Rows.Count; i++)
             {
@@ -224,7 +198,6 @@ namespace PRFCreator
                     else
                     {
                         Logger.WriteLog("Error adding extra file " + filename + ": Unknown file type");
-                        return;
                     }
                 }
             }
