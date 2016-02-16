@@ -19,26 +19,27 @@ namespace PRFCreator
 
         private static void CleanLog()
         {
-            if (form.status_textbox.InvokeRequired)
-                form.status_textbox.Invoke(new MethodInvoker(delegate { if (form.status_textbox.Lines.Length > 30) form.status_textbox.Text = string.Empty; }));
-            else if (form.status_textbox.Lines.Length > 30)
-                form.status_textbox.Text = string.Empty;
+            int ldel = form.status_textbox.Lines.Length - 60;
+            if (ldel > 0)
+            {
+                string txt = form.status_textbox.Text;
+                while (ldel-- > 0)
+                    txt = txt.Substring(txt.IndexOf('\n') + 1);
+
+                form.status_textbox.Text = txt;
+            }
         }
 
         public static void WriteLog(string str)
         {
-            CleanLog();
+            Utility.InvokeIfNecessary(form.status_textbox, new MethodInvoker(CleanLog));
             str = GetTimeDate() + " - " + str + "\n";
 
-            if (form.status_textbox.InvokeRequired)
-            {
-                form.status_textbox.Invoke(new MethodInvoker(delegate { form.status_textbox.AppendText(str); form.status_textbox.ScrollToCaret(); }));
-            }
-            else
-            {
-                form.status_textbox.AppendText(str);
-                form.status_textbox.ScrollToCaret();
-            }
+            Utility.InvokeIfNecessary(form.status_textbox, new MethodInvoker(delegate 
+                { 
+                    form.status_textbox.AppendText(str);
+                    form.status_textbox.ScrollToCaret();
+                }));
         }
     }
 }

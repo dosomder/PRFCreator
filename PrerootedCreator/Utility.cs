@@ -5,11 +5,20 @@ using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace PRFCreator
 {
     static class Utility
     {
+        public static void InvokeIfNecessary(Control control, MethodInvoker action)
+        {
+            if (control.InvokeRequired)
+                control.Invoke(action);
+            else
+                action();
+        }
+
         public static string GetTempPath()
         {
             if (string.IsNullOrEmpty(Settings.templocation))
