@@ -238,8 +238,8 @@ namespace PRFCreator
             FileInfo fi = new FileInfo(Settings.destinationFile);
             if (fi.Length > int.MaxValue)
             {
-                Logger.WriteLog("Warning: Flashable zip size is bigger than 2GB! It may be possible that flashing fails.");
-                MessageBox.Show("Warning: Flashable zip size is bigger than 2GB! It may be possible that flashing fails.", "PRFCreator", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Logger.WriteLog("Warning: Flashable zip size is bigger than 2GB! It may be possible that flashing fails. Please make sure you are using TWRP 3.0 or higher.");
+                MessageBox.Show("Warning: Flashable zip size is bigger than 2GB! It may be possible that flashing fails. Please make sure you are using TWRP 3.0 or higher.", "PRFCreator", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             Logger.WriteLog("Finished\n");
