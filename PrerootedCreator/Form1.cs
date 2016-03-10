@@ -18,7 +18,7 @@ namespace PRFCreator
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            version_label.Text = "v1.2";
+            version_label.Text = "v1.3";
             openFileDialog1.FileName = string.Empty;
 
             Logger.form = Job.form = this;
