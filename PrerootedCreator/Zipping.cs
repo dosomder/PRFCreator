@@ -9,6 +9,33 @@ namespace PRFCreator
 {
     static class Zipping
     {
+        public static string[] ListZipContent(string zipfile, string pattern = null)
+        {
+            try
+            {
+                using (ZipFile zip = new ZipFile(zipfile))
+                {
+                    ICollection<ZipEntry> entries;
+                    if (string.IsNullOrEmpty(pattern))
+                        entries = zip.Entries;
+                    else
+                        entries = zip.SelectEntries("name = '" + pattern + "'");
+
+                    int i = 0;
+                    string[] list = new string[entries.Count];
+                    foreach (ZipEntry ze in entries)
+                        list[i++] = ze.FileName;
+
+                    return list;
+                }
+            }
+            catch (Ionic.Zip.BadReadException)
+            {
+                Logger.WriteLog("Error: The zip file " + zipfile + " seems corrupt");
+            }
+            return null;
+        }
+
         public static bool ExistsInZip(string zipfile, string file)
         {
             try
