@@ -182,12 +182,12 @@ namespace PRFCreator
             }
         }
 
-        private static void ExtractAndAddSin(BackgroundWorker worker, string name, string ftffile, string AsFilename = "")
+        private static bool ExtractAndAddSin(BackgroundWorker worker, string name, string ftffile, string AsFilename = "")
         {
             if (Zipping.ExistsInZip(ftffile, name + ".sin") == false)
             {
                 OnError(name, AsFilename);
-                return;
+                return false;
             }
 
             Zipping.UnzipFile(worker, ftffile, name + ".sin", string.Empty, Utility.GetTempPath(), false);
@@ -197,6 +197,8 @@ namespace PRFCreator
                 Zipping.AddToZip(worker, Settings.destinationFile, Path.Combine(Utility.GetTempPath(), name + ".sin"), (AsFilename == "" ? name : AsFilename) + ".sin", false, Ionic.Zlib.CompressionLevel.None);
                 File.Delete(Path.Combine(Utility.GetTempPath(), name + ".sin"));
             }
+
+            return true;
         }
 
         private static void OnError(string name, string AsFilename = "")
