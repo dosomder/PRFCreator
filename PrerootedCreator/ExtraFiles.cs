@@ -111,10 +111,12 @@ namespace PRFCreator
         private static void AddFOTAKernel(BackgroundWorker worker, string ftffile)
         {
             if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
+            {
                 if (ExtractAndAddSin(worker, "fotakernel", ftffile))
                     AddSinToConfig(worker, "fotakernel");
-                else
-                    ExtractAndAdd(worker, "fotakernel", ".elf", ftffile);
+            }
+            else
+                ExtractAndAdd(worker, "fotakernel", ".elf", ftffile);
         }
 
         private static void AddLTALabel(BackgroundWorker worker, string ftffile)
@@ -127,10 +129,12 @@ namespace PRFCreator
             }
 
             if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
+            {
                 if (ExtractAndAddSin(worker, Path.GetFileNameWithoutExtension(ltalname), ftffile, "ltalabel"))
                     AddSinToConfig(worker, "ltalabel");
-                else
-                    ExtractAndAdd(worker, Path.GetFileNameWithoutExtension(ltalname), ".ext4", ftffile, "ltalabel");
+            }
+            else
+                ExtractAndAdd(worker, Path.GetFileNameWithoutExtension(ltalname), ".ext4", ftffile, "ltalabel");
         }
 
         private static string GetModemFilename(string ftffile)
