@@ -18,17 +18,23 @@ then
 	exit 1
 fi
 
+if [ ! -f unarchive ];
+then
+	echo "Error: Could not find unarchive"
+	exit 1
+fi
+
 exitcode=1
 folder=`pwd`
 
-data_apps=`./busybox unzip -l "$zip" | grep "data/app/.*\.apk" | ./busybox awk '{ print $4 }'`
+data_apps=`./unarchive -l "$zip" | grep "data/app/.*\.apk" | ./busybox awk '{ print $4 }'`
 #data_apps_names=`echo "$data_apps" | ./busybox sed 's/data\/app\///g'`
 echo $data_apps
 #echo $data_apps_names
 
 if [ -n "$data_apps" ];
 then
-	./busybox unzip "$zip" $data_apps -d /
+	./unarchive "$zip" $data_apps -d /
 	cd /
 	chmod 644 $data_apps
 	chown system:system $data_apps
@@ -38,14 +44,14 @@ fi
 
 cd "$folder"
 
-system_apps=`./busybox unzip -l "$zip" | grep "system/app/.*\.apk" | ./busybox awk '{ print $4 }'`
+system_apps=`./unarchive -l "$zip" | grep "system/app/.*\.apk" | ./busybox awk '{ print $4 }'`
 #system_apps_names=`echo "$system_apps" | ./busybox sed 's/system\/app\///g'`
 echo $system_apps
 #echo $system_apps_names
 
 if [ -n "$system_apps" ];
 then
-	./busybox unzip "$zip" $system_apps -d /
+	./unarchive "$zip" $system_apps -d /
 	cd /
 	chmod 644 $system_apps
 	chown root:root $system_apps
