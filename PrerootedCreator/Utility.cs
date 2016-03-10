@@ -128,6 +128,18 @@ namespace PRFCreator
             File.Delete(Path.Combine(Utility.GetTempPath(), "prfconfig"));
         }
 
+        public static string ReadConfig(BackgroundWorker worker, string key)
+        {
+            Zipping.UnzipFile(worker, Settings.destinationFile, "prfconfig", string.Empty, Utility.GetTempPath(), false);
+            string content = File.ReadAllText(Path.Combine(Utility.GetTempPath(), "prfconfig"), Encoding.ASCII);
+            File.Delete(Path.Combine(Utility.GetTempPath(), "prfconfig"));
+
+            if (!content.Contains(key + "="))
+                return null;
+
+            return Regex.Match(content, "^" + key + "=(.*)$", RegexOptions.Multiline).Groups[1].Value;
+        }
+
         public static string ManifestGetName(byte[] manifest)
         {
             byte[] m = Encoding.Unicode.GetBytes("manifest\0");

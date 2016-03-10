@@ -1,5 +1,1 @@
-SYSTEM=1
-LTALABEL=0
-FOTAKERNEL=0
-KERNEL=0
-MODEM=0
+sinfiles=system

@@ -8,6 +8,15 @@ namespace PRFCreator
 {
     static class ExtraFiles
     {
+        private static void AddSinToConfig(BackgroundWorker worker, string sinfile)
+        {
+            string val;
+            if ((val = Utility.ReadConfig(worker, "sinfiles")) == null)
+                Utility.EditConfig(worker, "sinfiles", sinfile);
+            else
+                Utility.EditConfig(worker, "sinfiles", val + "," + sinfile);
+        }
+
         public static void AddExtraFiles(BackgroundWorker worker, string name, string ftffile)
         {
             switch (name)
@@ -87,26 +96,25 @@ namespace PRFCreator
         {
             if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
             {
-                ExtractAndAddSin(worker, GetKernelFilename(ftffile), ftffile, "boot");
-                ExtractAndAddSin(worker, "rpm", ftffile);
+                if (ExtractAndAddSin(worker, GetKernelFilename(ftffile), ftffile, "boot"))
+                    AddSinToConfig(worker, "boot");
+                if (ExtractAndAddSin(worker, "rpm", ftffile))
+                    AddSinToConfig(worker, "rpm");
             }
             else
             {
                 ExtractAndAdd(worker, GetKernelFilename(ftffile), ".elf", ftffile, "boot");
                 ExtractAndAdd(worker, "rpm", ".elf", ftffile);
             }
-
-            Utility.EditConfig(worker, "KERNEL", "1");
         }
 
         private static void AddFOTAKernel(BackgroundWorker worker, string ftffile)
         {
             if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
-                ExtractAndAddSin(worker, "fotakernel", ftffile);
-            else
-                ExtractAndAdd(worker, "fotakernel", ".elf", ftffile);
-
-            Utility.EditConfig(worker, "FOTAKERNEL", "1");
+                if (ExtractAndAddSin(worker, "fotakernel", ftffile))
+                    AddSinToConfig(worker, "fotakernel");
+                else
+                    ExtractAndAdd(worker, "fotakernel", ".elf", ftffile);
         }
 
         private static void AddLTALabel(BackgroundWorker worker, string ftffile)
@@ -119,11 +127,10 @@ namespace PRFCreator
             }
 
             if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
-                ExtractAndAddSin(worker, Path.GetFileNameWithoutExtension(ltalname), ftffile, "ltalabel");
-            else
-                ExtractAndAdd(worker, Path.GetFileNameWithoutExtension(ltalname), ".ext4", ftffile, "ltalabel");
-
-            Utility.EditConfig(worker, "LTALABEL", "1");
+                if (ExtractAndAddSin(worker, Path.GetFileNameWithoutExtension(ltalname), ftffile, "ltalabel"))
+                    AddSinToConfig(worker, "ltalabel");
+                else
+                    ExtractAndAdd(worker, Path.GetFileNameWithoutExtension(ltalname), ".ext4", ftffile, "ltalabel");
         }
 
         private static string GetModemFilename(string ftffile)
@@ -142,9 +149,12 @@ namespace PRFCreator
         {
             if (PartitionInfo.ScriptMode == PartitionInfo.Mode.Sinflash)
             {
-                ExtractAndAddSin(worker, GetModemFilename(ftffile), ftffile, "amss_fsg");
-                ExtractAndAddSin(worker, "amss_fs_1", ftffile);
-                ExtractAndAddSin(worker, "amss_fs_2", ftffile);
+                if (ExtractAndAddSin(worker, GetModemFilename(ftffile), ftffile, "amss_fsg"))
+                    AddSinToConfig(worker, "amss_fsg");
+                if (ExtractAndAddSin(worker, "amss_fs_1", ftffile))
+                    AddSinToConfig(worker, "amss_fs_1");
+                if (ExtractAndAddSin(worker, "amss_fs_2", ftffile))
+                    AddSinToConfig(worker, "amss_fs_2");
             }
             else
             {
@@ -152,8 +162,6 @@ namespace PRFCreator
                 ExtractAndAdd(worker, "amss_fs_1", string.Empty, ftffile);
                 ExtractAndAdd(worker, "amss_fs_2", string.Empty, ftffile);
             }
-
-            Utility.EditConfig(worker, "MODEM", "1");
         }
 
         private static void ExtractAndAdd(BackgroundWorker worker, string name, string extension, string ftffile, string AsFilename = "")
