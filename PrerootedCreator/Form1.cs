@@ -39,6 +39,8 @@ namespace PRFCreator
                 return;
 
             ftf_textbox.Text = openFileDialog1.FileName;
+            ExtraFiles.FetchSinFromFTF(openFileDialog1.FileName);
+            include_checklist.Enabled = true;
             openFileDialog1.FileName = string.Empty;
         }
 
@@ -123,8 +125,6 @@ namespace PRFCreator
             Utility.InvokeIfNecessary(include_checklist, new MethodInvoker(delegate { include_checklist.Enabled = Enabled; }));
             Utility.InvokeIfNecessary(create_button, new MethodInvoker(delegate { create_button.Enabled = Enabled; }));
             Utility.InvokeIfNecessary(options_checklist, new MethodInvoker(delegate { options_checklist.Enabled = Enabled; }));
-            Utility.InvokeIfNecessary(add_extra_button, new MethodInvoker(delegate { add_extra_button.Enabled = Enabled; }));
-            Utility.InvokeIfNecessary(remove_extra_button, new MethodInvoker(delegate { remove_extra_button.Enabled = Enabled; }));
             Utility.InvokeIfNecessary(extra_dataGridView, new MethodInvoker(delegate { extra_dataGridView.AllowUserToDeleteRows = Enabled; }));
 
             Utility.InvokeIfNecessary(extra_dataGridView, new MethodInvoker(delegate { dataGridViewEnabled(extra_dataGridView, "GridViewType", Enabled); }));
@@ -164,7 +164,7 @@ namespace PRFCreator
             openFileDialog1.FileName = string.Empty;
         }
 
-        private void add_extra_button_Click(object sender, EventArgs e)
+        private void extra_dataGridView_DoubleClick(object sender, EventArgs e)
         {
             if (isWorking)
                 return;
@@ -205,15 +205,6 @@ namespace PRFCreator
             }
 
             openFileDialog1.FileName = string.Empty;
-        }
-
-        private void remove_extra_button_Click(object sender, EventArgs e)
-        {
-            if (isWorking)
-                return;
-
-            if (extra_dataGridView.SelectedRows.Count > 0)
-                extra_dataGridView.Rows.Remove(extra_dataGridView.SelectedRows[0]);
         }
     }
 }

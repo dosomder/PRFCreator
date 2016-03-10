@@ -3,11 +3,75 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace PRFCreator
 {
     static class ExtraFiles
     {
+        //key is displayable name
+        //value is a Dictionary
+        //key2 is destination file name in flashable zip
+        //value is array of possible (regex) name in ftf
+        private static Dictionary<string, Dictionary<string, string[]>> extrafilesDic = null;
+        private static void InitDic()
+        {
+            if (extrafilesDic != null)
+                return;
+
+            extrafilesDic = new Dictionary<string, Dictionary<string, string[]>>();
+            //kernel
+            Dictionary<string, string[]> kdic = new Dictionary<string, string[]>();
+            kdic.Add("boot", new string[] { "kernel", "boot" });
+            kdic.Add("rpm", new string[] { "rpm" });
+            extrafilesDic.Add("Kernel", kdic);
+            //fotakernel
+            Dictionary<string, string[]> fotadic = new Dictionary<string, string[]>();
+            fotadic.Add("fotakernel", new string[] { "fotakernel" });
+            extrafilesDic.Add("FOTAKernel", fotadic);
+            //modem
+            Dictionary<string, string[]> mdic = new Dictionary<string, string[]>();
+            mdic.Add("amss_fsg", new string[] { "amss_fsg", "amss_fs_3", "modem" });
+            mdic.Add("amss_fs_1", new string[] { "amss_fs_1" });
+            mdic.Add("amss_fs_2", new string[] { "amss_fs_2" });
+            extrafilesDic.Add("Modem", mdic);
+            //elabel
+            Dictionary<string, string[]> edic = new Dictionary<string, string[]>();
+            edic.Add("ltalabel", new string[] { "elabel.*" });
+            extrafilesDic.Add("LTALabel", edic);
+
+            //sinflash doesn't support partition-image yet
+            //partition-image
+            //Dictionary<string, string[]> pdic = new Dictionary<string, string[]>();
+            //pdic.Add("partition-image", new string[] { "partition", "partition-image" });
+            //extrafilesDic.Add("Partition Image", pdic);
+        }
+
+        public static void FetchSinFromFTF(string ftf)
+        {
+            InitDic();
+            Utility.InvokeIfNecessary(Form1.form.include_checklist, () => { Form1.form.include_checklist.Items.Clear(); });
+
+            string[] filelist = Zipping.ListZipContent(ftf);
+            foreach (string key in extrafilesDic.Keys)
+            {
+                foreach (string key2 in extrafilesDic[key].Keys)
+                    foreach (string name in extrafilesDic[key][key2])
+                        foreach (string f in filelist)
+                            if (Regex.Match(f, name + "\\.sin").Success)
+                            {
+                                //Logger.WriteLog("Found sinfile: " + key);
+                                Utility.InvokeIfNecessary(Form1.form.include_checklist, () =>
+                                {
+                                    Form1.form.include_checklist.Items.Add(key);
+                                });
+                                goto OuterLoop;
+                            }
+            OuterLoop:
+                ;
+            }
+        }
+
         private static void AddSinToConfig(BackgroundWorker worker, string sinfile)
         {
             string val;

@@ -49,8 +49,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.add_extra_button = new System.Windows.Forms.Button();
-            this.remove_extra_button = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.extra_lbl = new System.Windows.Forms.Label();
             this.extra_dataGridView = new System.Windows.Forms.DataGridView();
@@ -126,7 +124,7 @@
             // 
             // create_button
             // 
-            this.create_button.Location = new System.Drawing.Point(510, 406);
+            this.create_button.Location = new System.Drawing.Point(501, 406);
             this.create_button.Name = "create_button";
             this.create_button.Size = new System.Drawing.Size(75, 23);
             this.create_button.TabIndex = 8;
@@ -141,7 +139,7 @@
             this.status_textbox.Location = new System.Drawing.Point(15, 274);
             this.status_textbox.Name = "status_textbox";
             this.status_textbox.ReadOnly = true;
-            this.status_textbox.Size = new System.Drawing.Size(588, 129);
+            this.status_textbox.Size = new System.Drawing.Size(618, 129);
             this.status_textbox.TabIndex = 9;
             this.status_textbox.Text = "";
             // 
@@ -156,7 +154,7 @@
             // 
             this.version_label.AutoSize = true;
             this.version_label.Font = new System.Drawing.Font("Consolas", 7.5F);
-            this.version_label.Location = new System.Drawing.Point(583, 1);
+            this.version_label.Location = new System.Drawing.Point(611, 1);
             this.version_label.Name = "version_label";
             this.version_label.Size = new System.Drawing.Size(0, 12);
             this.version_label.TabIndex = 11;
@@ -194,7 +192,7 @@
             // 
             this.job_label.AutoSize = true;
             this.job_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.job_label.Location = new System.Drawing.Point(454, 409);
+            this.job_label.Location = new System.Drawing.Point(449, 409);
             this.job_label.Margin = new System.Windows.Forms.Padding(0);
             this.job_label.Name = "job_label";
             this.job_label.Size = new System.Drawing.Size(30, 15);
@@ -205,7 +203,7 @@
             // 
             this.jobnum_label.AutoSize = true;
             this.jobnum_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.jobnum_label.Location = new System.Drawing.Point(480, 409);
+            this.jobnum_label.Location = new System.Drawing.Point(475, 409);
             this.jobnum_label.Margin = new System.Windows.Forms.Padding(0);
             this.jobnum_label.Name = "jobnum_label";
             this.jobnum_label.Size = new System.Drawing.Size(0, 15);
@@ -245,7 +243,7 @@
             this.groupBox2.Location = new System.Drawing.Point(495, 9);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(108, 104);
+            this.groupBox2.Size = new System.Drawing.Size(138, 104);
             this.groupBox2.TabIndex = 21;
             this.groupBox2.TabStop = false;
             // 
@@ -254,38 +252,16 @@
             this.groupBox3.Controls.Add(this.options_checklist);
             this.groupBox3.Location = new System.Drawing.Point(495, 105);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(108, 51);
+            this.groupBox3.Size = new System.Drawing.Size(138, 51);
             this.groupBox3.TabIndex = 23;
             this.groupBox3.TabStop = false;
-            // 
-            // add_extra_button
-            // 
-            this.add_extra_button.Location = new System.Drawing.Point(495, 49);
-            this.add_extra_button.Name = "add_extra_button";
-            this.add_extra_button.Size = new System.Drawing.Size(75, 23);
-            this.add_extra_button.TabIndex = 25;
-            this.add_extra_button.Text = "Add";
-            this.add_extra_button.UseVisualStyleBackColor = true;
-            this.add_extra_button.Click += new System.EventHandler(this.add_extra_button_Click);
-            // 
-            // remove_extra_button
-            // 
-            this.remove_extra_button.Location = new System.Drawing.Point(495, 78);
-            this.remove_extra_button.Name = "remove_extra_button";
-            this.remove_extra_button.Size = new System.Drawing.Size(75, 23);
-            this.remove_extra_button.TabIndex = 26;
-            this.remove_extra_button.Text = "Remove";
-            this.remove_extra_button.UseVisualStyleBackColor = true;
-            this.remove_extra_button.Click += new System.EventHandler(this.remove_extra_button_Click);
             // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.extra_lbl);
-            this.groupBox4.Controls.Add(this.remove_extra_button);
-            this.groupBox4.Controls.Add(this.add_extra_button);
             this.groupBox4.Location = new System.Drawing.Point(15, 157);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(588, 111);
+            this.groupBox4.Size = new System.Drawing.Size(618, 111);
             this.groupBox4.TabIndex = 27;
             this.groupBox4.TabStop = false;
             // 
@@ -320,8 +296,9 @@
             this.extra_dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.extra_dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.extra_dataGridView.ShowEditingIcon = false;
-            this.extra_dataGridView.Size = new System.Drawing.Size(474, 68);
+            this.extra_dataGridView.Size = new System.Drawing.Size(606, 68);
             this.extra_dataGridView.TabIndex = 29;
+            this.extra_dataGridView.DoubleClick += new System.EventHandler(this.extra_dataGridView_DoubleClick);
             // 
             // GridViewName
             // 
@@ -346,6 +323,7 @@
             this.include_checklist.BackColor = System.Drawing.SystemColors.Menu;
             this.include_checklist.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.include_checklist.CheckOnClick = true;
+            this.include_checklist.Enabled = false;
             this.include_checklist.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.include_checklist.FormattingEnabled = true;
             this.include_checklist.Items.AddRange(new object[] {
@@ -355,7 +333,7 @@
             "LTALabel"});
             this.include_checklist.Location = new System.Drawing.Point(5, 33);
             this.include_checklist.Name = "include_checklist";
-            this.include_checklist.Size = new System.Drawing.Size(92, 64);
+            this.include_checklist.Size = new System.Drawing.Size(127, 64);
             this.include_checklist.TabIndex = 17;
             // 
             // options_checklist
@@ -377,7 +355,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(615, 436);
+            this.ClientSize = new System.Drawing.Size(650, 436);
             this.Controls.Add(this.job_label);
             this.Controls.Add(this.extra_dataGridView);
             this.Controls.Add(this.groupBox4);
@@ -432,8 +410,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         public CustomCheckedListBox options_checklist;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button add_extra_button;
-        private System.Windows.Forms.Button remove_extra_button;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label extra_lbl;
         public System.Windows.Forms.DataGridView extra_dataGridView;
