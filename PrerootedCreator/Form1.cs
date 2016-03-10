@@ -5,11 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace PRFCreator
 {
     public partial class Form1 : Form
     {
+        public static Form1 form;
         public static bool isWorking = false;
         public Form1()
         {
@@ -21,7 +23,7 @@ namespace PRFCreator
             version_label.Text = "v1.3";
             openFileDialog1.FileName = string.Empty;
 
-            Logger.form = Job.form = this;
+            form = this;
             Settings.ReadSettings();
         }
 
@@ -65,12 +67,12 @@ namespace PRFCreator
         {
             if (isWorking)
                 return;
-            if (!System.IO.File.Exists(ftf_textbox.Text))
+            if (!File.Exists(ftf_textbox.Text))
             {
                 Logger.WriteLog("Error: Please specify a valid FTF file");
                 return;
             }
-            if (!System.IO.File.Exists(su_textbox.Text))
+            if (!File.Exists(su_textbox.Text))
             {
                 Logger.WriteLog("Error: Please specify a valid SuperSU.zip");
                 return;
@@ -79,7 +81,7 @@ namespace PRFCreator
             {
                 Logger.WriteLog("Info: No updater-script found in SuperSU zip. Are you sure it's a flashable zip?");
             }
-            if (!System.IO.File.Exists(rec_textbox.Text))
+            if (!File.Exists(rec_textbox.Text))
             {
                 Logger.WriteLog("Info: Not adding recovery");
             }
@@ -103,7 +105,7 @@ namespace PRFCreator
                 Settings.destinationFile = "flashable-prerooted.zip";
 
             Utility.WriteResourceToFile("PRFCreator.Resources.flashable-prerooted.zip", Settings.destinationFile);
-            if (!System.IO.File.Exists(Settings.destinationFile))
+            if (!File.Exists(Settings.destinationFile))
             {
                 Logger.WriteLog("Error: Unable to extract flashable-prerooted.zip from the exe");
                 return;

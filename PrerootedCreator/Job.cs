@@ -9,27 +9,25 @@ namespace PRFCreator
 {
     class Job
     {
-        public static Form1 form;
-
         private static int JobNum = 0;
         private static void SetJobNum(int num)
         {
-            if (form.jobnum_label.InvokeRequired)
-                form.jobnum_label.Invoke(new MethodInvoker(delegate { form.jobnum_label.Text = num + "/" + GetJobCount(); }));
+            if (Form1.form.jobnum_label.InvokeRequired)
+                Form1.form.jobnum_label.Invoke(new MethodInvoker(delegate { Form1.form.jobnum_label.Text = num + "/" + GetJobCount(); }));
             else
-                form.jobnum_label.Text = num + "/" + GetJobCount();
+                Form1.form.jobnum_label.Text = num + "/" + GetJobCount();
         }
 
         private static int GetJobCount()
         {
             int count = jobs.Length - 1; //don't count 'Complete'
-            if (form.include_checklist.CheckedItems.Count < 1) //if there are no extra files
+            if (Form1.form.include_checklist.CheckedItems.Count < 1) //if there are no extra files
                 count--;
-            if (!form.options_checklist.CheckedItems.Contains("Sign zip"))
+            if (!Form1.form.options_checklist.CheckedItems.Contains("Sign zip"))
                 count--;
-            if (!File.Exists(form.rec_textbox.Text)) //if recovery is not included
+            if (!File.Exists(Form1.form.rec_textbox.Text)) //if recovery is not included
                 count--;
-            if (form.extra_dataGridView.Rows.Count < 1) //no additional zip files
+            if (Form1.form.extra_dataGridView.Rows.Count < 1) //no additional zip files
                 count--;
 
             return count;
@@ -48,9 +46,9 @@ namespace PRFCreator
                     + ". Currently you only have " + free + "MB available");
                 return;
             }
-            if (!Zipping.ExistsInZip(form.ftf_textbox.Text, "system.sin"))
+            if (!Zipping.ExistsInZip(Form1.form.ftf_textbox.Text, "system.sin"))
             {
-                Logger.WriteLog("Error: system.sin does not exist in file " + form.ftf_textbox.Text);
+                Logger.WriteLog("Error: system.sin does not exist in file " + Form1.form.ftf_textbox.Text);
                 return;
             }
             BackgroundWorker worker = new BackgroundWorker();
@@ -60,8 +58,8 @@ namespace PRFCreator
                 {
                     try
                     {
-                        form.ControlsEnabled(false);
-                        if (form.options_checklist.CheckedItems.Contains("Legacy mode"))
+                        Form1.form.ControlsEnabled(false);
+                        if (Form1.form.options_checklist.CheckedItems.Contains("Legacy mode"))
                             jobs = legacyjobs;
                         else
                             jobs = newjobs;
@@ -84,11 +82,11 @@ namespace PRFCreator
                 };
             worker.ProgressChanged += (o, _e) =>
                 {
-                    form.progressBar.Value = _e.ProgressPercentage;
+                    Form1.form.progressBar.Value = _e.ProgressPercentage;
                 };
             worker.RunWorkerCompleted += (o, _e) =>
                 {
-                    form.ControlsEnabled(true);
+                    Form1.form.ControlsEnabled(true);
                 };
             worker.RunWorkerAsync();
         }
@@ -96,8 +94,8 @@ namespace PRFCreator
         private static void UnpackSystem(BackgroundWorker worker)
         {
             SetJobNum(++JobNum);
-            Logger.WriteLog("Extracting system.sin from " + System.IO.Path.GetFileName(form.ftf_textbox.Text));
-            if (!Zipping.UnzipFile(worker, form.ftf_textbox.Text, "system.sin", string.Empty, Utility.GetTempPath()))
+            Logger.WriteLog("Extracting system.sin from " + System.IO.Path.GetFileName(Form1.form.ftf_textbox.Text));
+            if (!Zipping.UnzipFile(worker, Form1.form.ftf_textbox.Text, "system.sin", string.Empty, Utility.GetTempPath()))
             {
                 worker.CancelAsync();
                 return;
@@ -105,7 +103,7 @@ namespace PRFCreator
 
             byte[] UUID = PartitionInfo.ReadSinUUID(Path.Combine(Utility.GetTempPath(), "system.sin"));
             //PartitionInfo.ScriptMode = (UUID != null) ? PartitionInfo.Mode.LegacyUUID : PartitionInfo.Mode.Legacy;
-            if (!form.options_checklist.CheckedItems.Contains("Legacy mode"))
+            if (!Form1.form.options_checklist.CheckedItems.Contains("Legacy mode"))
                 PartitionInfo.ScriptMode = PartitionInfo.Mode.Sinflash;
             else
                 PartitionInfo.ScriptMode = (UUID != null) ? PartitionInfo.Mode.LegacyUUID : PartitionInfo.Mode.Legacy;
@@ -116,7 +114,7 @@ namespace PRFCreator
         {
             SetJobNum(++JobNum);
             Logger.WriteLog("Adding info to flashable script");
-            string fw = Utility.PadStr(Path.GetFileNameWithoutExtension(form.ftf_textbox.Text), " ", 41);
+            string fw = Utility.PadStr(Path.GetFileNameWithoutExtension(Form1.form.ftf_textbox.Text), " ", 41);
             Utility.EditScript(worker, "INSERT FIRMWARE HERE", fw);
         }
 
@@ -145,25 +143,25 @@ namespace PRFCreator
 
         private static void AddExtras(BackgroundWorker worker)
         {
-            if (form.include_checklist.CheckedItems.Count < 1)
+            if (Form1.form.include_checklist.CheckedItems.Count < 1)
                 return;
 
             Logger.WriteLog("Adding extra files");
             SetJobNum(++JobNum);
-            foreach (string item in form.include_checklist.CheckedItems)
-                ExtraFiles.AddExtraFiles(worker, item.ToLower(), form.ftf_textbox.Text);
+            foreach (string item in Form1.form.include_checklist.CheckedItems)
+                ExtraFiles.AddExtraFiles(worker, item.ToLower(), Form1.form.ftf_textbox.Text);
         }
 
         private static void AddExtraFlashable(BackgroundWorker worker)
         {
-            if(form.extra_dataGridView.Rows.Count < 1)
+            if(Form1.form.extra_dataGridView.Rows.Count < 1)
                 return;
 
             SetJobNum(++JobNum);
-            for (int i = 0; i < form.extra_dataGridView.Rows.Count; i++)
+            for (int i = 0; i < Form1.form.extra_dataGridView.Rows.Count; i++)
             {
-                string type = form.extra_dataGridView["GridViewType", i].Value.ToString();
-                string name = form.extra_dataGridView["GridViewName", i].Value.ToString();
+                string type = Form1.form.extra_dataGridView["GridViewType", i].Value.ToString();
+                string name = Form1.form.extra_dataGridView["GridViewName", i].Value.ToString();
                 if (!File.Exists(name))
                 {
                     Logger.WriteLog("Error adding Extra File '" + name + "': File does not exist");
@@ -180,18 +178,18 @@ namespace PRFCreator
         private static void AddSuperSU(BackgroundWorker worker)
         {
             SetJobNum(++JobNum);
-            Logger.WriteLog("Adding " + Path.GetFileName(form.su_textbox.Text));
-            string superSUFile = form.su_textbox.Text;
+            Logger.WriteLog("Adding " + Path.GetFileName(Form1.form.su_textbox.Text));
+            string superSUFile = Form1.form.su_textbox.Text;
             Zipping.AddToZip(worker, Settings.destinationFile, superSUFile, "SuperSU.zip", false);
         }
 
         private static void AddRecovery(BackgroundWorker worker)
         {
-            if (!File.Exists(form.rec_textbox.Text))
+            if (!File.Exists(Form1.form.rec_textbox.Text))
                 return;
 
             SetJobNum(++JobNum);
-            string recoveryFile = form.rec_textbox.Text;
+            string recoveryFile = Form1.form.rec_textbox.Text;
             Logger.WriteLog("Adding " + Path.GetFileName(recoveryFile));
             Zipping.AddToZip(worker, Settings.destinationFile, recoveryFile, "dualrecovery.zip");
         }
@@ -199,7 +197,7 @@ namespace PRFCreator
         //~ doubles the process time
         private static void SignZip(BackgroundWorker worker)
         {
-            if (!form.options_checklist.CheckedItems.Contains("Sign zip"))
+            if (!Form1.form.options_checklist.CheckedItems.Contains("Sign zip"))
                 return;
 
             SetJobNum(++JobNum);
