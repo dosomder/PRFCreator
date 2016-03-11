@@ -124,9 +124,9 @@
             // 
             // create_button
             // 
-            this.create_button.Location = new System.Drawing.Point(501, 406);
+            this.create_button.Location = new System.Drawing.Point(549, 406);
             this.create_button.Name = "create_button";
-            this.create_button.Size = new System.Drawing.Size(75, 23);
+            this.create_button.Size = new System.Drawing.Size(84, 23);
             this.create_button.TabIndex = 8;
             this.create_button.Text = "Create";
             this.create_button.UseVisualStyleBackColor = true;
@@ -147,7 +147,7 @@
             // 
             this.progressBar.Location = new System.Drawing.Point(15, 409);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(432, 16);
+            this.progressBar.Size = new System.Drawing.Size(468, 16);
             this.progressBar.TabIndex = 10;
             // 
             // version_label
@@ -192,7 +192,7 @@
             // 
             this.job_label.AutoSize = true;
             this.job_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.job_label.Location = new System.Drawing.Point(449, 409);
+            this.job_label.Location = new System.Drawing.Point(491, 409);
             this.job_label.Margin = new System.Windows.Forms.Padding(0);
             this.job_label.Name = "job_label";
             this.job_label.Size = new System.Drawing.Size(30, 15);
@@ -203,7 +203,7 @@
             // 
             this.jobnum_label.AutoSize = true;
             this.jobnum_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.jobnum_label.Location = new System.Drawing.Point(475, 409);
+            this.jobnum_label.Location = new System.Drawing.Point(520, 409);
             this.jobnum_label.Margin = new System.Windows.Forms.Padding(0);
             this.jobnum_label.Name = "jobnum_label";
             this.jobnum_label.Size = new System.Drawing.Size(0, 15);
