@@ -129,7 +129,7 @@ package_extract_file("SuperSU.zip", "/tmp/SuperSU.zip");
 run_program("/tmp/busybox", "mkdir", "/tmp/SuperSU_extracted");
 run_program("/tmp/busybox", "unzip", "-d", "/tmp/SuperSU_extracted", "/tmp/SuperSU.zip");
 set_perm(0, 0, 0755, "/tmp/SuperSU_extracted/META-INF/com/google/android/update-binary");
-run_program("/tmp/SuperSU_extracted/META-INF/com/google/android/update-binary", "dummy", file_getprop("/tmp/prfargs", "outfile"), "/tmp/SuperSU.zip");
+run_program("/tmp/SuperSU_extracted/META-INF/com/google/android/update-binary", file_getprop("/tmp/prfargs", "version"), file_getprop("/tmp/prfargs", "outfile"), "/tmp/SuperSU.zip");
 delete_recursive("/tmp/SuperSU_extracted");
 delete("/tmp/SuperSU.zip");
 
